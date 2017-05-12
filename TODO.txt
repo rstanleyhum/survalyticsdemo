@@ -1,0 +1,13 @@
+1. Start up with:
+    a. SetupDB
+    b. Create UserGUID on first Start
+    c. Set Oldsize to 0
+
+2. Create Async Actions Creators so that we can run the AWS in the background
+
+3. Setup the Permissions for Location
+
+4. Setup error/status messages on the app.
+
+5. Change the submit button for side effects actions.
+
