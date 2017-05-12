@@ -1,6 +1,9 @@
 'use strict';
 
-import { Location, Permissions } from 'expo';
+import { Location } from 'expo';
+import { AsyncStorage } from 'react-native';
+import AWS from 'aws-sdk';
+
 import { IsOnline, GetGeolocation, GetIpApiInfo } from 'network';
 import { DeleteQuestion, GetQuestion, InsertQuestions, GetResponsesToUpload, DeleteResponses } from 'localdb';
 
@@ -19,10 +22,6 @@ var dynamodb = new AWS.DynamoDB({
     region: awsConstants.AWS_US_EAST2_REGION,
     endpoint: awsConstants.AWS_US_WEST2_REGION
 });
-
-
-
-
 
 
 export const Download = (immediate) => {
@@ -118,11 +117,10 @@ const _processDownloadedData = (data) => {
 
 
 const _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-        // error message
-    }
-
+    // let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    // if (status !== 'granted') {
+    //     // error message
+    // }
     let location = await Location.getCurrentPositionAsync({});
     return location;
 }
