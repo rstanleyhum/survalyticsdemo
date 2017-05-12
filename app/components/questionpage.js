@@ -28,4 +28,4 @@ class QuestionPage extends React.Component {
     }
 }
 
-export default QuestionPage
+export default QuestionPage 

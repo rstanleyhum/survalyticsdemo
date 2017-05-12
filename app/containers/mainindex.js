@@ -1,8 +1,9 @@
-'use  strict';
+'use strict';
 
 import { connect } from 'react-redux';
 
 import MainIndexView from '../components/mainindexview';
+import { deleteAll, viewQuestions, upload, download } from '../actions/main';
 
 const mapStateToProps = (state) => {
     return {
@@ -12,16 +13,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onPressDeleteAll: () => {
-            console.log("delete all");
+            dispatch(deleteAll());
         },
         onPressViewQuestions: () => {
-            console.log("view questions");
+            dispatch(viewQuestions());
         },
         onPressDownload: () => {
-            console.log("download questions");
+            dispatch(download());
         },
         onPressUpload: () => {
-            console.log("upload reponses");
+            dispatch(upload());
         }
     }
 }

@@ -28,7 +28,6 @@ export const GetLocalInfo = () => {
         var today = new Date();
         var offset = today.getTimezoneOffset();
         var day = today.getDay();
-        var local_now = now - offset * 60 * 1000;
         var result = {
             "localtime_ms_int" : local_now,
             "localtime_hrsmilitary_int" : today.getHours(),

@@ -25,7 +25,7 @@ export const GetGeolocation = (lat, long) => {
             resolve(result);
         }).catch( (err) => {
             console.log(err);
-            reject(null);
+            resolve(null);
         });
 
     });
@@ -48,7 +48,7 @@ export const GetIpApiInfo = () => {
             resolve(result);
         }).catch( (err) => {
             console.log(err);
-            reject(null);
+            resolve(null);
         });
 
     });

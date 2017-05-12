@@ -90,6 +90,11 @@
  */
 
 
+export const TYPE_BUTTONS = 'buttons';
+export const TYPE_TEXT = 'text';
+export const TYPE_CHECKBOXES = 'checkboxes';
+export const TYPE_SLIDER = 'slider';
+
 
 class Question {
     
@@ -112,7 +117,7 @@ class Question {
         }
 
         if (typeof this.json_str.delaybydays_int != 'undefined') {
-            this.json_str.conditionalqdataTODO = todays_date + this.json_str.delaybydays;
+            this.json_str.conditional_upon_datemsid_int = Date.now() + (this.json_str.delaybydays_int * 24 * 60 * 60 * 1000);
             delete this.json_str[delaybydays_int];
         }
 

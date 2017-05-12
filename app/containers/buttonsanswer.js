@@ -1,12 +1,17 @@
-'user strict';
+'use strict';
 
 import { connect } from 'react-redux';
 
+import { submitButtonsAnswer } from '../actions/answer';
 import ButtonsEntry from '../components/buttonsentry';
 
-const mapStateToProps = (state) => {
+const BUTTON_COLOR = 'yellow';
+
+const mapStateToProps = (state) => { 
     return {
-        buttonsinfo: state.question.inferred.button_values,
+        buttonsinfo: state.question.inferred.button_values.map( (v, k) => {
+            return { name: v.button_response_text }
+        }),
         buttoncolor: BUTTON_COLOR,
     }
 }
@@ -14,7 +19,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onPress: (item) => {
-            dispatch(buttonPushed());
+            dispatch(submitButtonsAnswer(item));
         }
     }
 }

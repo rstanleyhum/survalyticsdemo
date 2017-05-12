@@ -15,7 +15,7 @@ class SliderEntry extends React.Component {
         return (
             <View>
                 <Text style={ this.props.sliderrangelabelstyle }>{ this.props.rangelabel }</Text>
-                <Text style={ this.props.sliderlabelstyle }>{ this.props.sliderlabel }</Text>
+                <Text style={ this.props.sliderlabelstyle }>{ this.state.slidervalue }</Text>
                 <Slider 
                     maximumValue={ this.props.maxvalue }
                     minimumValue={ this.props.minvalue }
@@ -23,7 +23,6 @@ class SliderEntry extends React.Component {
                     onSlidingComplete={() => this.props.updateSliderValue(this.value)}
                     onValueChange={ () => this.onValueChange(this.value) }
                 />
-                <Text style={this.props.labelstyle}>{this.state.slidervalue}</Text>
                 <Button 
                     onPress={ () => this.props.onSubmitPress() }
                     title="Submit"
