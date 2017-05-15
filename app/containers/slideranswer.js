@@ -1,12 +1,14 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
+import { PropTypes } from 'react';
+import { StyleSheet, View, Text, Slider, Button } from 'react-native';
 
 import { updateSliderValue, submitSliderAnswer } from '../actions/answer';
-import SliderEntry from '../components/sliderentry';
+
 
 const SUBMITCOLOR = 'orange';
+
 
 const styles = StyleSheet.create({
     sliderrangelabelstyle: {
@@ -23,32 +25,45 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
-    return {
-        sliderrangelabelstyle: styles.sliderrangelabelstyle,
-        rangelabel: "min ---- max",
-        sliderlabelstyle: styles.sliderlabelstyle,
-        sliderstyle: styles.sliderstyle,
-        submitcolor: SUBMITCOLOR,
-        maxvalue: state.question.inferred.slider_values.slider_max,
-        minvalue: state.question.inferred.slider_values.slider_min,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updateSliderValue: (value) => {
-            dispatch(updateSliderValue(value));
-        },
-        onSubmitPress: () => {
-            dispatch(submitSliderAnswer());
-        }
-    }
-}
+const SliderAnswer = ({value, maxvalue, minvalue, onValueChange, onSubmitPress}) => (
+    <View>
+        <Text style={styles.sliderrangelabelstyle }>min ---- max</Text>
+        <Text style={styles.sliderlabelstyle }>{value}</Text>
+        <Slider 
+            maximumValue={maxvalue}
+            minimumValue={minvalue}
+            style={styles.sliderstyle}
+            onValueChange={ (value) => this.props.onValueChange(value) }
+        />
+        <Button 
+            onPress={onSubmitPress}
+            title="Submit"
+            color= {SUBMITCOLOR}
+        />
+    </View>
+);
 
-const SliderAnswer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(SliderEntry)
 
-export default SliderAnswer
+SliderAnswer.propTypes = {
+    value: PropTypes.number.isRequired,
+    maxvalue: PropTypes.number.isRequired,
+    minvalue: PropTypes.number.isRequired,
+    onValueChange: PropTypes.func.isRequired,
+    onSubmitPress: PropTypes.func.isRequired
+};
+
+
+const mapStateToProps = state => ({
+    value: state.question.inferred.slider_values.slider_value,
+    maxvalue: state.question.inferred.slider_values.slider_max,
+    minvalue: state.question.inferred.slider_values.slider_min,
+});
+
+const mapDispatchToProps = dispatch => ({
+    updateSliderValue: (value) => dispatch(updateSliderValue(value)),
+    onSubmitPress: () => dispatch(submitSliderAnswer())
+});
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(SliderAnswer)

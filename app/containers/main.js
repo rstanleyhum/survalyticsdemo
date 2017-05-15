@@ -1,8 +1,7 @@
 'use strict';
 
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
-
+import React from 'react';
 import MainIndex from '../containers/mainindex';
 
 
@@ -14,6 +13,7 @@ const styles = StyleSheet.create({
         backgroundColor: HEADER,
     }
 });
+
 
 const Main = () => (
     <View style={styles.container}>

@@ -1,11 +1,31 @@
 'use strict';
 
-export const SUBMIT_TEXT_ANSWER = 'SUBMIT_TEXT_ANSWER';
+import { uploadResponses } from '../actions/upload';
+import { InsertResponses } from '../survalytics/localdb';
+
+
 export const CHANGE_TEXT_ANSWER = 'CHANGE_TEXT_ANSWER';
 
-export function submitTextAnswer() {
-    return { type: SUBMIT_TEXT_ANSWER }
+
+export const submitAnswer = (dispatch, getState) => {
+    dispatch(submittingResponse(true));
+
+    getState().question.UpdateQuestion();
+
+    var r = getState().question.GetResponse();
+
+    InsertResponses([r]);
+
+    dispatch(uploadResponses());
+
+    dispatch(submittingResponse(false));
 }
+
+
+export function submitTextAnswer() {
+    return submtAnswer;
+}
+
 
 export function changeTextAnswer(text) {
     return { 
@@ -15,12 +35,13 @@ export function changeTextAnswer(text) {
 }
 
 
-export const SUBMIT_SLIDER_ANSWER = 'SUBMIT_SLIDER_ANSWER';
 export const UPDATE_SLIDER_VALUE = 'UPDATE_SLIDER_VALUE';
 
+
 export function submitSliderAnswer() {
-    return { type: SUBMIT_SLIDER_ANSWER }
+    return submitAnswer;
 }
+
 
 export function updateSliderValue(value) {
     return {
@@ -29,7 +50,6 @@ export function updateSliderValue(value) {
     }
 }
 
-export const SUBMIT_BUTTONS_ANSWER = 'SUBMIT_BUTTONS_ANSWER';
 
 export function submitButtonsAnswer(item) {
     return { 
@@ -38,14 +58,13 @@ export function submitButtonsAnswer(item) {
     }
 }
 
-export const SUBMIT_CHECKBOXES_ANSWER = 'SUBMIT_CHECKBOXES_ANSWER';
+
 export const CHANGE_CHECKBOX_VALUE = 'CHANGE_CHECKBOX_VALUE';
 
 export function submitCheckBoxesAnswer() {
-    return {
-        type: SUBMIT_CHECKBOXES_ANSWER
-    }
+    return submitAnswer;
 }
+
 
 export function changeCheckBoxValue(item, value) {
     return {
@@ -56,8 +75,8 @@ export function changeCheckBoxValue(item, value) {
 }
 
 
-export const SKIP_QUESTION = 'SKIP_QUESTION';
-
 export function skipQuestion() {
-    return { type: SKIP_QUESTION }
+    return (dispatch, getState) => {
+        // skip Question
+    }
 }

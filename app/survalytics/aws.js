@@ -2,14 +2,19 @@
 
 import { Location } from 'expo';
 import { AsyncStorage } from 'react-native';
-import AWS from 'aws-sdk';
+var AWS = require('aws-sdk/dist/aws-sdk-react-native');
 
-import { IsOnline, GetGeolocation, GetIpApiInfo } from 'network';
-import { DeleteQuestion, GetQuestion, InsertQuestions, GetResponsesToUpload, DeleteResponses } from 'localdb';
+import { IsOnline, GetGeolocation, GetIpApiInfo } from './network';
+import { GetAllQuestions, DeleteQuestionsByGuid, DeleteQuestion, GetQuestion, InsertQuestions, GetResponsesToUpload, DeleteResponses } from './localdb';
+import { NewQuestion, DeleteQuestionGUID } from './question';
+
+console.log(typeof IsOnline);
+
+var awsConstants = require('../assets/secrets.json');
+//var awsReturnDataTxt = require('../assets/aws_data.data.txt');
 
 
-// AWS login and table information
-var awsConstants = require("../assets/secrets.json");
+console.log(awsConstants);
 
 var myCredentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: awsConstants.IDENTITY_POOL_ID,
@@ -19,16 +24,17 @@ var myCredentials = new AWS.CognitoIdentityCredentials({
 
 var dynamodb = new AWS.DynamoDB({
     credentials: myCredentials,
-    region: awsConstants.AWS_US_EAST2_REGION,
-    endpoint: awsConstants.AWS_US_WEST2_REGION
+    region: awsConstants.AWS_US_WEST2_REGION,
+    endpoint: awsConstants.AWS_US_WEST2_ENDPOINT,
+    dynamoDbCrc32: false
 });
 
 
-export const Download = (immediate) => {
+export const Download = (immediate = false) => {
     var p = new Promise( (resolve, reject) => {
         var current_size;
 
-        IsOnline.then( (isConnected) => {
+        IsOnline().then( (isConnected) => {
             if (!isConnected) {
                 throw false;
             }
@@ -37,9 +43,9 @@ export const Download = (immediate) => {
             };
             return dynamodb.describeTable(params).promise();
 
-        }).then( (data) => {
+        }).then( async (data) => {
             current_size = data.Table.TableSizeBytes;
-            var old_size = (await AsyncStorage.getItem('@TableSize')) || 0;
+            let old_size = parseInt(await AsyncStorage.getItem('@TableSize')) || 0;
 
             if ((current_size == old_size) && !immediate) {
                 throw false;
@@ -51,16 +57,25 @@ export const Download = (immediate) => {
                 Limit: 10
             };
             var list = [];
-            return _loadTableItems(params, list);
-        }).then( (data) => {
-            new_questions_list = _processDownloadedData(data);
-            await AsyncStorage.setItem('@TableSize:key', current_size);
-            if (new_questions_list) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-        }).catch( () => {
+            console.log("before Promise all");
+            return Promise.all([_loadTableItems(params, list), GetAllQuestions()]);
+        }).then( async (return_data) => {
+            console.log("after Promise all");
+            let server_questions_json = return_data[0];
+            let local_questions = return_data[1];
+            return _processDownloadedData(server_questions_json, local_questions);
+        }).then( async (processed_data) => {
+            console.log("after processed data");
+            await AsyncStorage.setItem('@TableSize:key', current_size.toString());
+            console.log(processed_data);
+            //if (processed_data[0].length > 0) {
+            //    resolve(true);
+            //} else {
+            //    resolve(false);
+            //}
+            resolve(true);
+        }).catch( (error) => {
+            console.log("Download: catch: " + error);
             reject(false);
         });
     });
@@ -69,7 +84,6 @@ export const Download = (immediate) => {
 
 
 const _loadTableItems = (params, list) => {
-
     var p = new Promise( (resolve, reject) => {
         dynamodb.scan(params, (err, data) => {
             if (err) {
@@ -79,7 +93,7 @@ const _loadTableItems = (params, list) => {
 
                 if (typeof data.LastEvaluatedKey != "undefined") {
                     params.ExclusiveStartKey = data.LastEvaluatedKey;
-                    loadTableItems(params, list).then( () => {
+                    _loadTableItems(params, list).then( () => {
                         resolve(list);
                     });
                 } else {
@@ -93,26 +107,40 @@ const _loadTableItems = (params, list) => {
 };
 
 
-const _processDownloadedData = (data) => {
+const _processDownloadedData = (server_questions_json, local_questions) => {
     var new_questions_list = [];
+    var data = server_questions_json;
     var num_items = data.length;
+    
+    var delete_question_guids = [];
+    
+    var local_questions_guids = local_questions.map( (item, idx) => {
+        return item.questionguid_str;
+    });
+
+    var questions_to_delete = [];
     for (var i = 0; i < num_items; i++) {
-        var q = new Question(data[i].questionguid_str, data[i].json_str, data[i].ordinalposition_int);
+        var q = NewQuestion(data[i].questionguid_str.S, data[i].json_str.S, data[i].ordinalposition_int.N);
 
-        if (typeof q.DeleteQuestionGUID == "undefined") {
-            DeleteQuestions([q]);
+        var deleteguid = DeleteQuestionGUID(q);
+
+        if (deleteguid != null) {
+            delete_question_guids.push(deleteguid);
+            continue;
+        };
+
+        if (local_questions_guids.indexOf(q.questionguid_str) >= 0) {
             continue;
         }
-
-        if (GetQuestion(q.questionguid) != null) {
-            continue;
-        }
-
-        InsertQuestions([q]);
-
         new_questions_list.push(q);
     }
-    return q;
+
+
+
+    var p1 = DeleteQuestionsByGuid(delete_question_guids);
+    var p2 = InsertQuestions(new_questions_list);
+    
+    return Promise.all([p1, p2]);
 };
 
 
@@ -125,12 +153,13 @@ const _getLocationAsync = async () => {
     return location;
 }
 
+
 export const Upload = () => {
     var p = new Promise( (resolve, reject) => {
         var responses = [];
         var geodata;
 
-        IsOnline.then( (isConnected) => {
+        IsOnline().then( async (isConnected) => {
             if (!isConnected) {
                 throw false;
             }
@@ -142,7 +171,7 @@ export const Upload = () => {
                 GetGeolocation(location.coords.latitude, location.coords.longitude),
                 GetIpApiInfo()
             ]);
-        }).then( (data) => {
+        }).then( async (data) => {
             var responses = data[0];
             var geolocation = data[1] || {};
             var ipapiinfo = data[2] || {};
@@ -175,10 +204,5 @@ export const Upload = () => {
     return p;
 };
 
-
-export default AWSService = {
-    Download,
-    Upload
-};
 
 

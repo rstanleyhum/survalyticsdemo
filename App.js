@@ -3,14 +3,21 @@
 import React from 'react';
 
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
-import Main from './app/components/main';
+import Main from './app/containers/main';
 import AppReducer from './app/reducers/appreducer';
+import { SetupLocalDB } from './app/survalytics/localdb';
 
-let store = createStore(AppReducer);
+let store = createStore(
+  AppReducer, 
+  applyMiddleware(thunk)
+);
 
+
+SetupLocalDB();
 
 export default class App extends React.Component {
   render() {

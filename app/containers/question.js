@@ -1,10 +1,12 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
+import { PropTypes } from 'react';
+import { StyleSheet, View, Button } from 'react-native';
+import HTMLView from 'react-native-htmlview';
 
+import Answer from '../containers/answer';
 import { skipQuestion } from '../actions/answer';
-import QuestionPage from '../components/questionpage';
 
 
 const SKIPBUTTONCOLOR = 'red';
@@ -15,27 +17,36 @@ const styles = StyleSheet.create({
     }
 });
 
+const Question = ({onSkipPressed, htmlcontent}) => (
+    <View>
+        <Button 
+            onPress={onSkipPressed}
+            title="Skip"
+            color= {SKIPBUTTONCOLOR}
+        />
+        <HTMLView
+            value={htmlcontent}
+            stylesheet={styles}
+        />
+        <Answer />                
+    </View>
+
+);
 
 
-const mapStateToProps = (state) => {
-    return {
-        skipcolor: SKIPBUTTONCOLOR,
-        htmlcontent: state.question.json_str.questionprompt_str,
-        stylesheet: styles
-    }
+Question.propTypes = {
+    onSkipPressed: PropTypes.func.isRequired,
+    htmlcontent: PropTypes.string.isRequired
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onSkipPressed: () => {
-            dispatch(skipQuestion());
-        }
-    }
-}
 
-const Question = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(QuestionPage)
+const mapStateToProps = state => ({
+    htmlcontent: state.question.json_str.questionprompt_str
+});
 
-export default Question
+
+const mapDispatchToProps = dispatch => ({
+    onSkipPressed: () => dispatch(skipQuestion())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question);

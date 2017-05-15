@@ -42,5 +42,3 @@ export const GetLocalInfo = () => {
     return p;
 };
 
-
-export default Device = { GetDeviceInfo, GetLocalInfo };

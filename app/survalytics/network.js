@@ -61,8 +61,7 @@ export const IsOnline = () => {
 };
 
 
-export default Network = {
-    GetGeolocation,
-    GetIpApiInfo,
-    IsOnline
-};
+
+
+
+
