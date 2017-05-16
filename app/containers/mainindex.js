@@ -4,13 +4,11 @@ import React, { PropTypes } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { deleteAllQuestions } from '../actions/deleteall';
-import { viewQuestions } from '../actions/viewquestions';
-import { uploadResponses } from '../actions/upload';
-import { downloadSurvey } from '../actions/download';
+import { deleteAllQuestions, viewQuestions, uploadResponses, downloadSurvey } from '../actions/mainindex';
 
 import { GetAllQuestions } from '../survalytics/localdb';
 import { GetAWSReturnData, InsertIntoLocalDB } from '../survalytics/testing';
+
 
 const styles = StyleSheet.create({
     container: {

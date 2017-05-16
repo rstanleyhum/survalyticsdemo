@@ -8,13 +8,8 @@ import { IsOnline, GetGeolocation, GetIpApiInfo } from './network';
 import { GetAllQuestions, DeleteQuestionsByGuid, DeleteQuestion, GetQuestion, InsertQuestions, GetResponsesToUpload, DeleteResponses } from './localdb';
 import { NewQuestion, DeleteQuestionGUID } from './question';
 
-console.log(typeof IsOnline);
 
 var awsConstants = require('../assets/secrets.json');
-//var awsReturnDataTxt = require('../assets/aws_data.data.txt');
-
-
-console.log(awsConstants);
 
 var myCredentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: awsConstants.IDENTITY_POOL_ID,
@@ -56,23 +51,16 @@ export const Download = (immediate = false) => {
                 ConsistentRead: true,
                 Limit: 10
             };
+
             var list = [];
-            console.log("before Promise all");
+            
             return Promise.all([_loadTableItems(params, list), GetAllQuestions()]);
         }).then( async (return_data) => {
-            console.log("after Promise all");
             let server_questions_json = return_data[0];
             let local_questions = return_data[1];
             return _processDownloadedData(server_questions_json, local_questions);
         }).then( async (processed_data) => {
-            console.log("after processed data");
             await AsyncStorage.setItem('@TableSize:key', current_size.toString());
-            console.log(processed_data);
-            //if (processed_data[0].length > 0) {
-            //    resolve(true);
-            //} else {
-            //    resolve(false);
-            //}
             resolve(true);
         }).catch( (error) => {
             console.log("Download: catch: " + error);
@@ -135,8 +123,6 @@ const _processDownloadedData = (server_questions_json, local_questions) => {
         new_questions_list.push(q);
     }
 
-
-
     var p1 = DeleteQuestionsByGuid(delete_question_guids);
     var p2 = InsertQuestions(new_questions_list);
     
@@ -198,11 +184,6 @@ export const Upload = () => {
         }).catch( (status) => {
             reject(status);
         });
-        
-        resolve(true);
     });
     return p;
 };
-
-
-

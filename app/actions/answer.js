@@ -10,11 +10,11 @@ export const CHANGE_TEXT_ANSWER = 'CHANGE_TEXT_ANSWER';
 export const submitAnswer = (dispatch, getState) => {
     dispatch(submittingResponse(true));
 
-    getState().question.UpdateQuestion();
+    dispatch(updateQuestion());
+    
+    dispatch(createResponse());
 
-    var r = getState().question.GetResponse();
-
-    InsertResponses([r]);
+    dispatch(insertResponse());
 
     dispatch(uploadResponses());
 

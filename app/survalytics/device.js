@@ -17,7 +17,6 @@ export const GetDeviceInfo = () => {
         }
         resolve(result);
     });
-
     return p;
 };
 
@@ -38,7 +37,6 @@ export const GetLocalInfo = () => {
         };
         resolve(result);
     });
-
     return p;
 };
 

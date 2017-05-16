@@ -40,6 +40,9 @@ export const NewResponseFromQuestion = (q) => {
     return response;
 };
 
+export const CloneResponse = (r) => {
+    return JSON.parse(JSON.stringify(r));
+}
 
 const _addHeader = async (json) => {
     var result = JSON.parse(JSON.stringify(json));

@@ -6,7 +6,6 @@ import { StyleSheet, View, Button } from 'react-native';
 import CheckBox from 'react-native-checkbox';
 
 import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../actions/answer';
-import CheckBoxesEntry from '../components/checkboxesentry';
 
 
 const SUBMITCOLOR = 'yellow';

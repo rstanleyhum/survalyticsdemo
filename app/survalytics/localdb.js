@@ -112,7 +112,6 @@ export const InsertQuestions = (questions) => {
         });
         Promise.all(processes)
             .then( (data) => {
-                console.log(data);
                 resolve(true);
             })
             .catch( (err) => {
@@ -129,14 +128,10 @@ export const GetAllQuestions = () => {
         var questions = [];
         db.transaction(
             tx => {
-                tx.executeSql("SELECT * FROM questionlist;", [], (tx, rs) => {
-                    let num_results = rs.rows.length;
-                    for (var i = 0; i < num_results; i++) {
-                        let data = rs.rows._array[i];
-                        var q = NewQuestion(data.questionguid_str, data.json_str, data.ordinalposition_int, data.final_responseid_int, data.final_response_str, data.ongoingquestion_int, data.answered_int, data.uploaded_int);
-                        questions.push(q);
-                        console.log(JSON.stringify(q, null, 4));
-                    }
+                tx.executeSql(SELECT_ALL_QUESTIONS_SQL, [], (tx, rs) => {
+                    questions = rs.rows._array.map( (data, idx) => {
+                        return NewQuestion(data.questionguid_str, data.json_str, data.ordinalposition_int, data.final_responseid_int, data.final_response_str, data.ongoingquestion_int, data.answered_int, data.uploaded_int);
+                    });
                 },
                 (tx, err) => {console.log(err)})
             },
@@ -145,7 +140,6 @@ export const GetAllQuestions = () => {
                 reject([]);
             },
             () => {
-                console.log(questions.length);
                 resolve(questions);
             }
         );
@@ -295,11 +289,7 @@ export const GetNextUnansweredQuestion = () => {
         console.log("Start GetNextUnansweredQuestion");
         db.transaction(
             tx => {
-//                tx.executeSql(SELECT_NEXT_UNANSWERED_QUESTION_SQL, [], (tx, rs) => {
-                tx.executeSql("SELECT * FROM questionlist where answered_int = 0;", [], (tx, rs) => {
-                        console.log("Hello");
-                        console.log(rs);
-
+                tx.executeSql(SELECT_NEXT_UNANSWERED_QUESTION_SQL, [], (tx, rs) => {
                         if (rs.row._array) {
                             row_results = Object.assign({}, rs.rows._array);
                         };
@@ -445,5 +435,3 @@ export const DeleteResponses = (responses) => {
     });
     return p;
 };
-
-

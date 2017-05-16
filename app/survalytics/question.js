@@ -132,6 +132,10 @@ export const NewQuestion = (questionguid_str, json_str, ordinalposition_int, fin
 };
 
 
+export const CloneQuestion = (q) => {
+    return JSON.parse(JSON.stringify(q));
+}
+
 const _calculatedInferred = (json_str) => {
     var button_values = [];
     var text_values = {
