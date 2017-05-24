@@ -5,8 +5,8 @@ import { PropTypes } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
-import Answer from '../containers/answer';
-import { skipQuestion } from '../actions/answer';
+import Answer from '../component/answer';
+import { skipQuestion } from '../../actions/answer';
 
 
 const SKIPBUTTONCOLOR = 'red';

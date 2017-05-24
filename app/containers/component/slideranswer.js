@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'react';
 import { StyleSheet, View, Text, Slider, Button } from 'react-native';
 
-import { updateSliderValue, submitSliderAnswer } from '../actions/answer';
+import { updateSliderValue, submitSliderAnswer } from '../../actions/answer';
 
 
 const SUBMITCOLOR = 'orange';

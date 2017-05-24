@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
 import { View, Button } from 'react-native';
 
-import { submitButtonsAnswer } from '../actions/answer';
+import { submitButtonsAnswer } from '../../actions/answer';
 
 
 const BUTTON_COLOR = 'yellow';

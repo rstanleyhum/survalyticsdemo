@@ -3,12 +3,12 @@
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
 
-import ButtonsAnswer from '../containers/buttonsanswer';
-import CheckBoxesAnswer from '../containers/checkboxesanswer';
-import SliderAnswer from '../containers/slideranswer';
-import TextAnswer from '../containers/textanswer';
+import ButtonsAnswer from './buttonsanswer';
+import CheckBoxesAnswer from './checkboxesanswer';
+import SliderAnswer from './slideranswer';
+import TextAnswer from './textanswer';
 
-import { TYPE_BUTTONS, TYPE_TEXT, TYPE_CHECKBOXES, TYPE_SLIDER } from '../survalytics/question';
+import { TYPE_BUTTONS, TYPE_TEXT, TYPE_CHECKBOXES, TYPE_SLIDER } from '../../survalytics/question';
 
 
 

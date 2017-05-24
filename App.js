@@ -1,20 +1,12 @@
 'use strict';
 
 import React from 'react';
-
-
-import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 
-import Main from './app/containers/main';
-import AppReducer from './app/reducers/appreducer';
+import store from './app/store';
+import MainApp from './app/mainapp';
+
 import { SetupLocalDB } from './app/survalytics/localdb';
-
-let store = createStore(
-  AppReducer, 
-  applyMiddleware(thunk)
-);
 
 
 SetupLocalDB();
@@ -22,8 +14,8 @@ SetupLocalDB();
 export default class App extends React.Component {
   render() {
     return (
-      <Provider store={store}>
-        <Main />
+      <Provider store={ store }>
+        <MainApp />
       </Provider>
     );
   }

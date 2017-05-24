@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'react';
 import { StyleSheet, View, TextInput, Text, Button } from 'react-native';
 
-import { submitTextAnswer, changeTextAnswer } from '../actions/answer';
+import { submitTextAnswer, changeTextAnswer } from '../../actions/answer';
 
 const SUBMITCOLOR = 'yellow';
 

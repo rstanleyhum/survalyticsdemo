@@ -5,7 +5,7 @@ import React, { PropTypes } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import CheckBox from 'react-native-checkbox';
 
-import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../actions/answer';
+import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../../actions/answer';
 
 
 const SUBMITCOLOR = 'yellow';

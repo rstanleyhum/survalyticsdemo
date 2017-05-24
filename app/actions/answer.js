@@ -1,7 +1,7 @@
 'use strict';
 
-import { uploadResponses } from '../actions/upload';
-import { InsertResponses } from '../survalytics/localdb';
+//import { uploadResponses } from '../actions/upload';
+//import { InsertResponses } from '../survalytics/localdb';
 
 
 export const CHANGE_TEXT_ANSWER = 'CHANGE_TEXT_ANSWER';
@@ -14,9 +14,9 @@ export const submitAnswer = (dispatch, getState) => {
     
     dispatch(createResponse());
 
-    dispatch(insertResponse());
+   // dispatch(insertResponse());
 
-    dispatch(uploadResponses());
+   // dispatch(uploadResponses());
 
     dispatch(submittingResponse(false));
 }

@@ -1,4 +1,5 @@
 'use strict';
+import { NavigationActions } from 'react-navigation';
 
 import { DeleteAllQuestions, GetNextUnansweredQuestion } from '../survalytics/localdb';
 import { Download, Upload } from '../survalytics/aws';
@@ -53,7 +54,7 @@ export function viewQuestions() {
 
                 dispatch(setCurrentQuestion(q));
 
-                dispatch(displaySurveyQuestion());
+                dispatch(NavigationActions.navigate({ routeName: 'Question' }));
             })
             .catch( (err) => {
                 console.log(err);
