@@ -1,5 +1,7 @@
 'use strict';
 
+import { GetQuestion } from './localdb'
+
 /**
  * 
  * This structure holds the current question. The list of questions is always kept in the SQLITE db. This structure drives the display
@@ -149,19 +151,19 @@ const _calculatedInferred = (json_str) => {
     };
     var checkbox_values = [];
 
-    if (json_str.questiontype_str === 'TYPE_BUTTONS') {
+    if (json_str.questiontype_str == TYPE_BUTTONS) {
         button_values = _getButtonResponseStructure(json_str);
     }
 
-    if (json_str.questiontype_str === 'TYPE_TEXT') {
+    if (json_str.questiontype_str == TYPE_TEXT) {
         text_values = _getTextResponseStructure();
     }
 
-    if (json_str.questiontype_str === 'TYPE_SLIDER') {
+    if (json_str.questiontype_str == TYPE_SLIDER) {
         slider_values = _getSliderResponseStructure();
     }
 
-    if (json_str.questiontype_str === 'TYPE_CHECKBOXES') {
+    if (json_str.questiontype_str == TYPE_CHECKBOXES) {
         checkbox_values = _getCheckboxResponseStructure();
     }
 
@@ -251,9 +253,9 @@ const _getCheckboxResponseStructure = (json_str) => {
 export const IsConditional = (q) => {
     var conditional_guid = q.json_str.conditional_upon_questionguid_str;
     if (typeof conditional_guid == "undefined") {
-        return true;
+        return false;
     }
-    return false;
+    return true;
 };
 
 
@@ -274,7 +276,7 @@ export const IsRelevantConditionalQuestion = async (q) => {
     if (typeof conditional_guid == 'undefined') {
         return true;
     }
-
+    
     let original = await GetQuestion(conditional_guid);
     
     if ((original == null) || (!original.answered_bool)) {
@@ -290,11 +292,11 @@ export const IsRelevantConditionalQuestion = async (q) => {
 
 
 const _compareConditionalResponses = (cond_guid, questiontype, conditional, original) => {
-    if (questiontype == 'TYPE_CHECKBOXES') {
+    if (questiontype == TYPE_CHECKBOXES) {
         return _compareConditionalCheckboxesResponses(cond_guid, conditional, original);
-    } else if (questiontype == 'TYPE_SLIDER') {
+    } else if (questiontype == TYPE_SLIDER) {
         return _compareConditionalSliderResponses(conditional, original);
-    } else if (questiontype == 'TYPE_BUTTONS') {
+    } else if (questiontype == TYPE_BUTTONS) {
         return _compareConditionalButtonsResponses(conditional, original);
     }
     return false;
@@ -387,7 +389,7 @@ const _createQuestionTypeResponse = (q) => {
     var response_str = "";
     var response_id = 0;
 
-    if (q.json_str.questiontype_str == 'TYPE_BUTTONS') {
+    if (q.json_str.questiontype_str == TYPE_BUTTONS) {
         var num_buttons = q.inferred.button_values.length;
         for (var i = 0; i < num_buttons; i++) {
             if (q.inferred.button_values[i].button_selected) {
@@ -398,17 +400,17 @@ const _createQuestionTypeResponse = (q) => {
         }
     }
 
-    if (q.json_str.questiontype_str == 'TYPE_TEXT') {
+    if (q.json_str.questiontype_str == TYPE_TEXT) {
         response_str = q.inferred.text_values.text_answer_text;
         response_id = -499;
     }
 
-    if (q.json_str.questiontype_str == 'TYPE_SLIDER') {
+    if (q.json_str.questiontype_str == TYPE_SLIDER) {
         response_str = q.inferred.slider_values.slider_value;
         response_id = -498;
     }
 
-    if (q.json_str.questiontype_str == 'TYPE_CHECKBOXES') {
+    if (q.json_str.questiontype_str == TYPE_CHECKBOXES) {
         results = [];
         var num_checkboxes = q.inferred.checkbox_values.length;
         for (var i = 0; i < num_checkboxes; i++) {

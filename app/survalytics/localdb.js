@@ -154,15 +154,14 @@ export const GetQuestion = (guid) => {
         var args = [
             guid
         ];
-
+        
         db.transaction(
             tx => {
                 tx.executeSql(SELECT_QUESTION_BY_GUID_SQL, args, (tx, rs) => {
                         if (rs.length > 1) {
                             reject(new Error("database corrupted two questions with same guid"));
                         }
-                        result = Object.assign({}, rs.rows._array);
-                        resolve(result);
+                        result = rs.rows._array.slice()[0]
                     },
                     (_, err) => {
                         console.log(err);
@@ -175,12 +174,7 @@ export const GetQuestion = (guid) => {
                 resolve(null);
             },
             () => { 
-                console.log(guid, "success", result);
-                if (Object.keys(result).length === 0 && result.constructor === Object) {
-                    console.log("returning null");
-                    resolve(null);
-                }
-                var item = result[0];
+                var item = result;
 
                 var q = NewQuestion(
                     item.questionguid_str,
@@ -190,6 +184,8 @@ export const GetQuestion = (guid) => {
                     item.final_response_str,
                     item.answered_int
                 );
+
+                console.log(JSON.stringify(q, null, 2));
                 resolve(q);
             }
         );
@@ -285,13 +281,12 @@ export const UpdateQuestions = (questions) => {
 
 export const GetNextUnansweredQuestion = () => {
     var p = new Promise( (resolve, reject) => {
-        var row_results = [];
-        console.log("Start GetNextUnansweredQuestion");
+        var row_results;
         db.transaction(
             tx => {
                 tx.executeSql(SELECT_NEXT_UNANSWERED_QUESTION_SQL, [], (tx, rs) => {
-                        if (rs.row._array) {
-                            row_results = Object.assign({}, rs.rows._array);
+                        if (rs.rows._array) {
+                            row_results = JSON.parse(JSON.stringify(rs.rows._array));
                         };
                     },
                     (_, err) => {console.log("error getting question", err)}
@@ -302,9 +297,8 @@ export const GetNextUnansweredQuestion = () => {
                 resolve(null);
             },
             () => { 
-                console.log("success");
+                var found = false;
                 var num_results = row_results.length;
-                
                 for (var i = 0; i < num_results; i++) {
                     var item = row_results[i];
                     var q = NewQuestion(
@@ -315,16 +309,23 @@ export const GetNextUnansweredQuestion = () => {
                         item.final_response_str,
                         item.answered_int
                     );
-            
+
                     if (!IsConditional(q)) {
                         resolve(q);
+                        found = true;
+                        break;
                     }
-
+                    
                     if (IsRelevantConditionalQuestion(q)) {
-                        resolve(q);
+                         resolve(q);
+                         found = true;
+                         break;
                     }
                 }
-                resolve(null);
+
+                if (!found) {
+                    resolve(null);
+                }
             }
         );
     });

@@ -53,18 +53,21 @@ const Main = ({onDeleteAll, onViewQuestions, onDownload, onUpload }) => (
             style={styles.button} >
             <Text>{'Delete All'}</Text>
         </TouchableOpacity>
-        <Button
-            title="View Questions"
+        <TouchableOpacity
             onPress={onViewQuestions}
-        />
-        <Button
-            title="Download"
+            style={styles.button} >
+            <Text>{'View Questions'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
             onPress={onDownload}
-        />
-        <Button
-            title="Upload Click"
+            style={styles.button} >
+            <Text>{'Download'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
             onPress={onUpload}
-        />
+            style={styles.button} >
+            <Text>{'Upload'}</Text>
+        </TouchableOpacity>
     </View>    
 );
 
