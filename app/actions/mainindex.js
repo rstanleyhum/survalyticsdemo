@@ -44,25 +44,28 @@ export function downloadSurvey(immediate = false) {
 export function viewQuestions() {
     return (dispatch) => {
         console.log("onViewQuestions");
-        dispatch(loadingQuestion(true));
-        GetNextUnansweredQuestion()
-            .then( (q) => {
-                console.log("Returning questions");
-                console.log(q);
-                dispatch(loadingQuestion(false));
-                if (!q) {
-                    dispatch(displayNoSurveyQuestions());
-                }
-                console.log("before set");
-                dispatch(setCurrentQuestion(q));
-                console.log("after set");
 
-                //dispatch(NavigationActions.navigate({ routeName: 'Question' }));
-            })
-            .catch( (error) => {
-                console.log(error);
-            });
-        console.log("onViewQuestions exiting");
+        dispatch(NavigationActions.navigate({ routeName: 'Question' }));
+        
+        // dispatch(loadingQuestion(true));
+        // GetNextUnansweredQuestion()
+        //     .then( (q) => {
+        //         console.log("Returning questions");
+        //         console.log(q);
+        //         dispatch(loadingQuestion(false));
+        //         if (!q) {
+        //             dispatch(displayNoSurveyQuestions());
+        //         }
+        //         console.log("before set");
+        //         dispatch(setCurrentQuestion(q));
+        //         console.log("after set");
+
+        //         //dispatch(NavigationActions.navigate({ routeName: 'Question' }));
+        //     })
+        //     .catch( (error) => {
+        //         console.log(error);
+        //     });
+        // console.log("onViewQuestions exiting");
     };
         // dispatch(loadingQuestion(true));
         

@@ -1,5 +1,7 @@
 'use strict';
 
+import { NavigationActions } from 'react-navigation';
+
 //import { uploadResponses } from '../actions/upload';
 //import { InsertResponses } from '../survalytics/localdb';
 
@@ -77,6 +79,6 @@ export function changeCheckBoxValue(item, value) {
 
 export function skipQuestion() {
     return (dispatch, getState) => {
-        // skip Question
+        dispatch(NavigationActions.back());
     }
 }

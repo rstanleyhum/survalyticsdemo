@@ -6,6 +6,7 @@ const initialState = {
 }
 
 function AppReducer(state = initialState, action) {
+    
     // switch(action.type) {
     //     case DELETE_ALL:
     //         return state;

@@ -156,15 +156,15 @@ const _calculatedInferred = (json_str) => {
     }
 
     if (json_str.questiontype_str == TYPE_TEXT) {
-        text_values = _getTextResponseStructure();
+        text_values = _getTextResponseStructure(json_str);
     }
 
     if (json_str.questiontype_str == TYPE_SLIDER) {
-        slider_values = _getSliderResponseStructure();
+        slider_values = _getSliderResponseStructure(json_str);
     }
 
     if (json_str.questiontype_str == TYPE_CHECKBOXES) {
-        checkbox_values = _getCheckboxResponseStructure();
+        checkbox_values = _getCheckboxResponseStructure(json_str);
     }
 
     return {
