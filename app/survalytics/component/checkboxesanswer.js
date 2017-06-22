@@ -5,7 +5,7 @@ import React, { PropTypes } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import CheckBox from 'react-native-checkbox';
 
-import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../../actions/answer';
+import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../actions/answer';
 
 
 const SUBMITCOLOR = 'yellow';
@@ -18,21 +18,17 @@ const styles = StyleSheet.create({
 
 
 const CheckBoxesAnswer = ({checkboxesinfo, onChange, onSubmitPress}) => {
-    let CheckBoxesArray = this.props.checkboxesinfo.map( (item, idx) => {
-        return (
-            <View>
-                <CheckBox 
+    return (
+        <View>
+            { checkboxesinfo.map( (item) => 
+                <CheckBox
+                    key={item.name}
                     labelStyle={styles.labelstyle} 
                     label={item.name} 
                     checked={item.result}
-                    onChange={ (checked) => this.props.onChange(item, checked) }
+                    onChange={ (current_value) => { onChange(item, !current_value); } }
                 />
-            </View>)
-    });
-
-    return (
-        <View>
-            {CheckBoxesArray}        
+            )}
             <Button 
                 onPress={onSubmitPress}
                 title="Submit"
@@ -51,9 +47,9 @@ CheckBoxesAnswer.propTypes = {
 
 
 const mapStateToProps = state => ({
-    checkboxesinfo: state.question.inferred.checkbox_values.map( (v, k) => {
+    checkboxesinfo: state.survalytic.currentq.question.inferred.checkbox_values.map( (v, k) => {
         return { 
-            name: v.checkbox_answer_repsonse_text,
+            name: v.checkbox_answer_response_text,
             result: v.checkbox_answer_checked
         } 
     })

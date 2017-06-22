@@ -23,7 +23,7 @@ export const GetDeviceInfo = () => {
 
 export const GetLocalInfo = () => {
     var p = new Promise( (resolve, reject) => {
-        var now = Date.now();
+        var local_now = Date.now();
         var today = new Date();
         var offset = today.getTimezoneOffset();
         var day = today.getDay();

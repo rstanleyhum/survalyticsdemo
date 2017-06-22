@@ -3,7 +3,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import AppReducer from './reducers/appreducer';
+import SurvalyticReducer from './survalytics/reducers/survalyticreducer';
 import { navReducer } from './appnav';
 
 const middleware = () => {
@@ -12,7 +12,7 @@ const middleware = () => {
 
 export default createStore(
     combineReducers({
-        applogic: AppReducer,
+        survalytic: SurvalyticReducer,
         nav: navReducer,
     }),
     middleware(),

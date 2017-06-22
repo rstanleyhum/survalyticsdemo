@@ -99,44 +99,48 @@ export const TYPE_SLIDER = 'slider';
 
 
 export const NewQuestion = (questionguid_str, json_str, ordinalposition_int, final_responseid_int = 0, final_response_str = '', ongoingquestion_int = null, answered_bool = 0, uploaded_int = 0) => {
-    var result = {};
-    result.questionguid_str = questionguid_str;
-    if (typeof json_str == "string") {
-        result.json_str = JSON.parse(json_str) || {};
-    } else {
-        result.json_str = JSON.parse(JSON.stringify(json_str)) || {};
-    }
-    result.ordinalposition_int = ordinalposition_int;
-    result.final_responseid_int = final_responseid_int;
-    result.final_response_str = final_response_str;
-    result.answered_bool = answered_bool;
-    if (typeof result.json_str.deletequestion_str != "undefined") {
-        return result;
-    }
+    var p = new Promise( (resolve, reject) => {
+        var result = {};
+        result.questionguid_str = questionguid_str;
+        if (typeof json_str == "string") {
+            result.json_str = JSON.parse(json_str) || {};
+        } else {
+            result.json_str = JSON.parse(JSON.stringify(json_str)) || {};
+        }
+        result.ordinalposition_int = ordinalposition_int;
+        result.final_responseid_int = final_responseid_int;
+        result.final_response_str = final_response_str;
+        result.answered_bool = answered_bool;
+        if (typeof result.json_str.deletequestion_str != "undefined") {
+            resolve(result);
+        }
 
-    if (ongoingquestion_int != null) {
-        result.ongoingquestion_int = ongoingquestion_int;
-    } else {
-        result.ongoingquestion_int = (typeof result.json_str.ongoingquestion_arr != 'undefined') ? 1 : 0;
-        result.answered_bool = (typeof result.json_str.ongoingquestion_arr != 'undefined') ? 1 : 0;
-    }
+        if (ongoingquestion_int != null) {
+            result.ongoingquestion_int = ongoingquestion_int;
+        } else {
+            result.ongoingquestion_int = (typeof result.json_str.ongoingquestion_arr != 'undefined') ? 1 : 0;
+            result.answered_bool = (typeof result.json_str.ongoingquestion_arr != 'undefined') ? 1 : 0;
+        }
 
-    if (typeof result.json_str.delaybydays_int != 'undefined') {
-        result.json_str.conditional_upon_datemsid_int = Date.now() + (result.json_str.delaybydays_int * 24 * 60 * 60 * 1000);
-        delete result.json_str.delaybydays_int;
-    }
+        if (typeof result.json_str.delaybydays_int != 'undefined') {
+            result.json_str.conditional_upon_datemsid_int = Date.now() + (result.json_str.delaybydays_int * 24 * 60 * 60 * 1000);
+            delete result.json_str.delaybydays_int;
+        }
 
-    result.uploaded_int = uploaded_int;
+        result.uploaded_int = uploaded_int;
 
-    result.inferred = _calculatedInferred(result.json_str);
-    
-    return result
+        result.inferred = _calculatedInferred(result.json_str);
+        
+        resolve(result)
+    });
+    return p;
 };
 
 
 export const CloneQuestion = (q) => {
     return JSON.parse(JSON.stringify(q));
-}
+};
+
 
 const _calculatedInferred = (json_str) => {
     var button_values = [];
@@ -251,43 +255,56 @@ const _getCheckboxResponseStructure = (json_str) => {
 
 
 export const IsConditional = (q) => {
-    var conditional_guid = q.json_str.conditional_upon_questionguid_str;
-    if (typeof conditional_guid == "undefined") {
-        return false;
-    }
-    return true;
+    var p = new Promise( (resolve, reject) => {
+        var conditional_guid = q.json_str.conditional_upon_questionguid_str;
+        if (typeof conditional_guid == "undefined") {
+            resolve(false);
+        }
+        resolve(true);
+    });
+    return p;
 };
 
 
-export const IsRelevantConditionalQuestion = async (q) => {
-    if (q.ongoingquestion_int || q.answered_bool) {
-        return false;
-    }
+export const IsRelevantConditionalQuestion = (q) => {
+    var p = new Promise( (resolve, reject) => {
+        if (q.ongoingquestion_int || q.answered_bool) {
+            resolve(false);
+        }
 
-    var conditional_time = q.json_str.conditional_upon_datemsid_int
-    let current_time = Date.now();
+        var conditional_time = q.json_str.conditional_upon_datemsid_int
+        let current_time = Date.now();
 
-    if ((typeof conditional_time != 'undefined') && (current_time < conditional_time)) {
-        return false;
-    }
+        if ((typeof conditional_time != 'undefined') && (current_time < conditional_time)) {
+            resolve(false);
+        }
 
-    var conditional_guid = q.json_str.conditional_upon_questionguid_str;
-    
-    if (typeof conditional_guid == 'undefined') {
-        return true;
-    }
-    
-    let original = await GetQuestion(conditional_guid);
-    
-    if ((original == null) || (!original.answered_bool)) {
-        return false;
-    }
+        var conditional_guid = q.json_str.conditional_upon_questionguid_str;
+        
+        if (typeof conditional_guid == 'undefined') {
+            resolve(true);
+        } else {
 
-    var conditional_response_array = this.json_str.conditional_upon_responseid_arr;
+            GetQuestion(conditional_guid)
+                .then( (original) => {
+                    if ((original == null) || (!original.answered_bool)) {
+                        resolve(false);
+                    }
 
-    var result = this._compareConditionalResponses(conditional_guid, original.questiontype_str, conditional_response_array, original.final_response_str);
+                    var conditional_response_array = this.json_str.conditional_upon_responseid_arr;
 
-    return result;
+                    return this._compareConditionalResponses(conditional_guid, original.questiontype_str, conditional_response_array, original.final_response_str);
+                })
+                .then( (result) => {
+                    resolve(result);
+                })
+                .catch( (error) => {
+                    reject(error);
+                });
+
+        }
+    });
+    return p;
 };
 
 
@@ -366,7 +383,10 @@ const _compareConditionalButtonsResponses = (cond, orig) => {
 
 
 export const DeleteQuestionGUID = (q) => {
-    return q.json_str.deletequestion_str || null;
+    var p = new Promise( (resolve, reject) => {
+        resolve(q.json_str.deletequestion_str || null);
+    });
+    return p;
 };
 
 
@@ -409,9 +429,9 @@ const _createQuestionTypeResponse = (q) => {
         response_str = q.inferred.slider_values.slider_value;
         response_id = -498;
     }
-
+    
     if (q.json_str.questiontype_str == TYPE_CHECKBOXES) {
-        results = [];
+        var results = [];
         var num_checkboxes = q.inferred.checkbox_values.length;
         for (var i = 0; i < num_checkboxes; i++) {
             var checkbox = q.inferred.checkbox_values[i];
@@ -430,7 +450,7 @@ const _createQuestionTypeResponse = (q) => {
     responses.final_response_str = response_str;
     responses.final_responseid_int = response_id;
 
-    return response;
+    return responses;
 };
 
 

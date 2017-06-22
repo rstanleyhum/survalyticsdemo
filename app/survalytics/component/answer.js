@@ -2,28 +2,29 @@
 
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
+import { View } from 'react-native';
 
 import ButtonsAnswer from './buttonsanswer';
 import CheckBoxesAnswer from './checkboxesanswer';
 import SliderAnswer from './slideranswer';
 import TextAnswer from './textanswer';
 
-import { TYPE_BUTTONS, TYPE_TEXT, TYPE_CHECKBOXES, TYPE_SLIDER } from '../../survalytics/question';
+import { TYPE_BUTTONS, TYPE_TEXT, TYPE_CHECKBOXES, TYPE_SLIDER } from '../../survalytics/services/question';
 
 
 
 const Answer = ({entrytype, buttonstype, texttype, slidertype, checkboxestype}) => {
-        switch({entrytype}) {
-            case {buttonstype}:
-                return <ButtonsAnswer />
-            case {texttype}:
-                return <TextAnswer />
-            case {slidertype}:
-                return <SliderAnswer />
-            case {checkboxestype}:
-                return <CheckboxesAnswer />
+        if (entrytype == buttonstype) {
+            return <ButtonsAnswer />
+        } else if (entrytype == texttype) {
+            return <TextAnswer />
+        } else if (entrytype == slidertype) {
+            return <SliderAnswer />
+        } else if (entrytype == checkboxestype) {
+            return <CheckBoxesAnswer />
+        } else {
+            return <View />
         }
-        return <View />
 };
 
 
@@ -37,7 +38,7 @@ Answer.propTypes = {
 
 
 const mapStateToProps = state => ({
-    entrytype: state.question.json_str.questiontype_str,
+    entrytype: state.survalytic.currentq.question.json_str.questiontype_str,
     buttonstype: TYPE_BUTTONS,
     texttype: TYPE_TEXT,
     slidertype: TYPE_SLIDER,

@@ -1,3 +1,12 @@
+'use strict';
+
+export const SET_DELETING_ALL = 'SET_DELETING_ALL';
+export const SET_DOWNLOADING_SURVEY = 'SET_DOWNLOADING_SURVEY';
+export const SET_HAS_NEW_QUESTIONS = 'SET_HAS_NEW_QUESTIONS';
+export const SET_HAS_SERVER_ERROR = 'SET_HAS_SERVER_ERROR';
+export const SET_LOADING_QUESTION = 'SET_LOADING_QUESTION';
+
+
 export function deletingAllQuestions(value) {
     return (dispatch) => {
         console.log("deletingAllQuestions: " + value);
@@ -32,8 +41,8 @@ export function loadingQuestion(value) {
 };
 
 
-export function displaySurveyQuestion() {
+export function uploadingResponses(value) {
     return (dispatch) => {
-        console.log("displaySurveyQuestion");
+        console.log("uploadingResponses: " + value);
     };
 };

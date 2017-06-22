@@ -1,10 +1,10 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { StyleSheet, View, Text, Slider, Button } from 'react-native';
 
-import { updateSliderValue, submitSliderAnswer } from '../../actions/answer';
+import { updateSliderValue, submitSliderAnswer } from '../actions/answer';
 
 
 const SUBMITCOLOR = 'orange';
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         color: 'blue',
     },
     sliderstyle: {
-        color: 'purple',
+        backgroundColor: 'purple',
     },
     labelstyle: {
         color: 'yellow',
@@ -28,13 +28,13 @@ const styles = StyleSheet.create({
 
 const SliderAnswer = ({value, maxvalue, minvalue, onValueChange, onSubmitPress}) => (
     <View>
-        <Text style={styles.sliderrangelabelstyle }>min ---- max</Text>
+        <Text style={styles.sliderrangelabelstyle }>{minvalue} ---- {maxvalue}</Text>
         <Text style={styles.sliderlabelstyle }>{value}</Text>
         <Slider 
             maximumValue={maxvalue}
             minimumValue={minvalue}
             style={styles.sliderstyle}
-            onValueChange={ (value) => this.props.onValueChange(value) }
+            onValueChange={ (value) => onValueChange(value) }
         />
         <Button 
             onPress={onSubmitPress}
@@ -55,13 +55,13 @@ SliderAnswer.propTypes = {
 
 
 const mapStateToProps = state => ({
-    value: state.question.inferred.slider_values.slider_value,
-    maxvalue: state.question.inferred.slider_values.slider_max,
-    minvalue: state.question.inferred.slider_values.slider_min,
+    value: state.survalytic.currentq.question.inferred.slider_values.slider_value,
+    maxvalue: state.survalytic.currentq.question.inferred.slider_values.slider_max,
+    minvalue: state.survalytic.currentq.question.inferred.slider_values.slider_min,
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateSliderValue: (value) => dispatch(updateSliderValue(value)),
+    onValueChange: (value) => dispatch(updateSliderValue(value)),
     onSubmitPress: () => dispatch(submitSliderAnswer())
 });
 

@@ -1,14 +1,18 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import {NavigationActions } from 'react-navigation';
 
-import { deleteAllQuestions, viewQuestions, uploadResponses, downloadSurvey } from '../../actions/mainindex';
+import { deleteAllQuestions, viewQuestions, uploadResponses, downloadSurvey, resetSkipSurvey } from '../../survalytics/actions/survey';
 
-import { GetAllQuestions } from '../../survalytics/localdb';
-import { GetAWSReturnData, InsertIntoLocalDB } from '../../survalytics/testing';
+import { GetAllQuestions, GetResponsesToUpload } from '../../survalytics/services/localdb';
+
+import { GetAWSReturnData, InsertIntoLocalDB } from '../../services/testing';
+
+import Survey from '../../survalytics/component/survey';
+
 
 const HEADER = '#3b5998'
 
@@ -18,6 +22,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         backgroundColor: 'grey',
+        marginTop:20,
     },
     button: {
         padding:20,
@@ -30,45 +35,63 @@ const styles = StyleSheet.create({
 });
 
 
-const Main = ({onDeleteAll, onViewQuestions, onDownload, onUpload }) => (
-    <View style={styles.container}>
-        <Text>{ 'Hello ContentPage' }</Text>
-        <TouchableOpacity
-            onPress={ async () => { await GetAllQuestions(); } }
-            style={styles.button} >
-            <Text>{'Select All'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={GetAWSReturnData}
-            style={styles.button} >
-            <Text>{'GetReturnData'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={InsertIntoLocalDB}
-            style={styles.button} >
-            <Text>{'InsertIntoLocalDB'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={onDeleteAll}
-            style={styles.button} >
-            <Text>{'Delete All'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={onViewQuestions}
-            style={styles.button} >
-            <Text>{'View Questions'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={onDownload}
-            style={styles.button} >
-            <Text>{'Download'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={onUpload}
-            style={styles.button} >
-            <Text>{'Upload'}</Text>
-        </TouchableOpacity>
-    </View>    
+const Main = ({onDeleteAll, onViewQuestions, onDownload, onUpload, resetSkip }) => (
+    <ScrollView>
+        <View style={styles.container}>
+            <Text>{ 'Survalytics Demo App' }</Text>
+
+            <Survey />
+
+            <TouchableOpacity
+                onPress={ async () => { console.log(JSON.stringify(await GetAllQuestions(), null, 2)); } }
+                style={styles.button} >
+                <Text>{'Show All LocalDB Questions'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={ async () => { console.log(JSON.stringify(await GetResponsesToUpload(), null, 2)); } }
+                style={styles.button} >
+                <Text>{'Show All LocalDB Responses'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={InsertIntoLocalDB}
+                style={styles.button} >
+                <Text>{'Insert From Local File Into LocalDB'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={onDeleteAll}
+                style={styles.button} >
+                <Text>{'Delete All'}</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+                onPress={onViewQuestions}
+                style={styles.button} >
+                <Text>{'View Questions'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={ resetSkip }
+                style={styles.button} >
+                <Text>{'Reset Skipped Survey Flag'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={onDownload}
+                style={styles.button} >
+                <Text>{'Download From AWS'}</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+                onPress={onUpload}
+                style={styles.button} >
+                <Text>{'Upload TO AWS'}</Text>
+            </TouchableOpacity>
+
+        </View>
+    </ScrollView>
 );
 
 
@@ -77,6 +100,7 @@ Main.propTypes = {
     onViewQuestions: PropTypes.func.isRequired,
     onDownload: PropTypes.func.isRequired,
     onUpload: PropTypes.func.isRequired,
+    resetSkip: PropTypes.func.isRequired
 };
 
 
@@ -88,7 +112,8 @@ const mapDispatchToProps = dispatch => ({
     onDeleteAll: () => dispatch(deleteAllQuestions()),
     onViewQuestions: () => dispatch(viewQuestions()),
     onDownload: () => dispatch(downloadSurvey()),
-    onUpload: () => dispatch(uploadResponses())
+    onUpload: () => dispatch(uploadResponses()),
+    resetSkip: () => dispatch(resetSkipSurvey())
 });
 
 

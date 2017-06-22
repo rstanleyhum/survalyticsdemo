@@ -5,27 +5,23 @@ import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
 import { View, Button } from 'react-native';
 
-import { submitButtonsAnswer } from '../../actions/answer';
+import { submitButtonsAnswer } from '../actions/answer';
 
 
 const BUTTON_COLOR = 'yellow';
 
 
 const ButtonsAnswer = ({buttonsinfo, buttoncolor, onPress}) => {
-    let ButtonsArray = this.props.buttonsinfo.map( (item, idx) => {
-        return (
-            <View>
-                <Button 
-                    title={item.name}
-                    color={this.props.buttoncolor}
-                    onPress={ () => this.props.onPress(item) }
-                />
-            </View>)
-    });
-
     return (
         <View>
-            {ButtonsArray}        
+            {buttonsinfo.map( (item) => 
+                <Button
+                    title={item.name}
+                    color={buttoncolor}
+                    key={item.name}
+                    onPress={ () => onPress(item) }
+                />
+            )}
         </View>
     )
 };
@@ -39,8 +35,10 @@ ButtonsAnswer.propTypes = {
 
 
 const mapStateToProps = state => ({ 
-    buttonsinfo: state.question.inferred.button_values.map( (v, k) => {
-        return { name: v.button_response_text }
+    buttonsinfo: state.survalytic.currentq.question.inferred.button_values.map( (v, k) => {
+        return {
+            name: v.button_response_text
+        }
     }),
     buttoncolor: BUTTON_COLOR,
 });

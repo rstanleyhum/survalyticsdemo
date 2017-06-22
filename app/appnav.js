@@ -3,11 +3,9 @@
 import { StackNavigator } from 'react-navigation';
 
 import Main from './containers/views/main';
-import Question from './containers/views/question';
 
 const routeConfiguration = {
     Main: { screen: Main },
-    Question: { screen: Question },
 }
 
 const stackNavigatorConfiguration = {

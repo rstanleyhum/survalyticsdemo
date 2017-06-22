@@ -1,18 +1,15 @@
-import { NewQuestion } from './question';
-import { InsertQuestions, GetAllQuestions } from './localdb';
+import { NewQuestion } from '../survalytics/services/question';
+import { InsertQuestions, GetAllQuestions } from '../survalytics/services/localdb';
 
 
 var awsReturnData = require('../assets/aws_data.json');
 
 
 export const GetAWSReturnData = () => {
-    console.log(awsReturnData.length);
-    console.log(JSON.stringify(awsReturnData, null, 2));
     return awsReturnData;
 }
 
 export const InsertIntoLocalDB = async () => {
-    console.log("Insert Into Local DB");
     let data = GetAWSReturnData();
     
     let localq = await GetAllQuestions();
@@ -28,7 +25,7 @@ export const InsertIntoLocalDB = async () => {
 
     for (var i = 0; i < num; i ++) {
 
-        var q = NewQuestion(data[i].questionguid_str.S, data[i].json_str.S, data[i].ordinalposition_int.N);
+        var q = await NewQuestion(data[i].questionguid_str.S, data[i].json_str.S, data[i].ordinalposition_int.N);
         
         if (localguids.indexOf(q.questionguid_str) >= 0) {
             continue;

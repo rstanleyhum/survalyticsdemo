@@ -6,8 +6,8 @@ import { Text, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import HTMLView from 'react-native-htmlview';
 
-import Answer from '../component/answer';
-import { skipQuestion } from '../../actions/answer';
+import Answer from './answer';
+import { setSkippedSurvey } from '../actions/questions';
 
 
 const SKIPBUTTONCOLOR = 'red';
@@ -36,15 +36,14 @@ const Question = ({onSkipPressed, htmlcontent}) => (
             style={styles.button}
             color={SKIPBUTTONCOLOR}
             >
-            <Text>{'Skip'}</Text>
+            <Text>{'Skip Survey'}</Text>
         </TouchableOpacity>
         <HTMLView
             value={htmlcontent}
             stylesheet={styles}
         />
-        
+        <Answer />
     </View>
-
 );
 
 
@@ -55,13 +54,12 @@ Question.propTypes = {
 
 
 const mapStateToProps = state => ({
-    //htmlcontent: state.question.json_str.questionprompt_str
-    htmlcontent: '<b>Hello htmlcontent</b>'
+    htmlcontent: state.survalytic.currentq.question.json_str.questionprompt_str
 });
 
 
 const mapDispatchToProps = dispatch => ({
-    onSkipPressed: () => dispatch(skipQuestion())
+    onSkipPressed: () => dispatch(setSkippedSurvey(true))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);

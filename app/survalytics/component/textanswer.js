@@ -1,30 +1,33 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { StyleSheet, View, TextInput, Text, Button } from 'react-native';
 
-import { submitTextAnswer, changeTextAnswer } from '../../actions/answer';
+import { submitTextAnswer, changeTextAnswer } from '../actions/answer';
 
 const SUBMITCOLOR = 'yellow';
 
 const styles = StyleSheet.create({
     textinputstyle: {
-        color: 'red',
+        margin: 15,
+        height: 40,
+        borderColor: 'grey',
+        borderWidth: 1
     },
     labelstyle: {
         color: 'blue',
     }
 });
 
-const TextAnswer = ({ text, label, onChangeText, onSubmitPress }) => (
+const TextAnswer = ({ text, onChangeText, onSubmitPress }) => (
     <View>
         <TextInput
             style={styles.textinputstyle }
-            onChangeText={ (text) => this.props.onChangeText(text) }
+            placeholder="placeholder"
+            onChangeText={ (text) => onChangeText(text) }
             value={text} 
         />
-        <Text style={styles.labelstyle}>{label}</Text>
         <Button 
             onPress={onSubmitPress}
             title="Submit"
@@ -36,7 +39,6 @@ const TextAnswer = ({ text, label, onChangeText, onSubmitPress }) => (
 
 TextAnswer.propTypes = {
     text: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
     onChangeText: PropTypes.func.isRequired,
     onSubmitPress: PropTypes.func.isRequired
 }
@@ -44,8 +46,7 @@ TextAnswer.propTypes = {
 
 
 const mapStateToProps = state => ({
-    text: state.question.inferred.text_values.text_answer_text,
-    label: state.question.inferred.text_values.text_response_text,
+    text: state.survalytic.currentq.question.inferred.text_values.text_answer_text,
 });
 
 
