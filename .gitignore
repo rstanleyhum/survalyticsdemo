@@ -266,3 +266,5 @@ freeline_project_description.json
 #### Extras
 
 secrets.json
+*.secret.*
+*.secrets.*
