@@ -2,45 +2,73 @@
 
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
-import { StyleSheet, View, Text, Slider, Button } from 'react-native';
+import { StyleSheet, View, Text, Slider, TouchableOpacity } from 'react-native';
 
 import { updateSliderValue, submitSliderAnswer } from '../actions/answer';
 
 
-const SUBMITCOLOR = 'orange';
+const SUBMITCOLOR = 'grey';
 
 
 const styles = StyleSheet.create({
-    sliderrangelabelstyle: {
-        color: 'red',
+    sliderrangelabelstyleleft: {
+        color: 'black',
+    },
+    sliderrangelabelstyleright: {
+        color: 'black',
     },
     sliderlabelstyle: {
-        color: 'blue',
+        color: 'black',
+        alignContent: 'center',
+        textAlign: 'center'
     },
     sliderstyle: {
-        backgroundColor: 'purple',
+        backgroundColor: 'grey',
     },
-    labelstyle: {
-        color: 'yellow',
-    }
+    sliderlabelcontainer: {
+        justifyContent: 'space-between',
+        flex: 1,
+        flexDirection: 'row',
+    },
+    inner: {
+        flex: 1,
+        alignContent: 'center',
+        marginTop:15,
+        marginBottom:10,
+        marginRight:20,
+        marginLeft:20,
+    },
+    button: {
+        padding: 5,
+        marginTop: 5,
+        backgroundColor: 'cyan',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 })
 
 
 const SliderAnswer = ({value, maxvalue, minvalue, onValueChange, onSubmitPress}) => (
     <View>
-        <Text style={styles.sliderrangelabelstyle }>{minvalue} ---- {maxvalue}</Text>
-        <Text style={styles.sliderlabelstyle }>{value}</Text>
-        <Slider 
-            maximumValue={maxvalue}
-            minimumValue={minvalue}
-            style={styles.sliderstyle}
-            onValueChange={ (value) => onValueChange(value) }
-        />
-        <Button 
+        <View style={styles.inner}>
+            <View style={styles.sliderlabelcontainer}>
+                <Text style={styles.sliderrangelabelstyleleft }>Min:{minvalue}</Text>
+                <Text style={styles.sliderrangelabelstyleright}>Max:{maxvalue}</Text>
+            </View>
+            <Slider 
+                maximumValue={maxvalue}
+                minimumValue={minvalue}
+                style={styles.sliderstyle}
+                onValueChange={ (value) => onValueChange(value) }
+            />
+            <Text style={styles.sliderlabelstyle }>{value}</Text>
+        </View>
+        <TouchableOpacity 
             onPress={onSubmitPress}
-            title="Submit"
-            color= {SUBMITCOLOR}
-        />
+            style={styles.button}
+        >
+            <Text>Submit</Text>
+        </TouchableOpacity>
     </View>
 );
 

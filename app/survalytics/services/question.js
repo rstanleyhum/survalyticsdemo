@@ -394,7 +394,7 @@ export const UpdateQuestionWithResponse = (q) => {
     var result = JSON.parse(JSON.stringify(q));
     var responses = _createQuestionTypeResponse(q);
 
-    if ((responses.final_response_str == "") && (repsonses.final_responseid_int == 0)) {
+    if ((responses.final_response_str == "") && (responses.final_responseid_int == 0)) {
         return null;
     }
     result.answered_bool = 1;

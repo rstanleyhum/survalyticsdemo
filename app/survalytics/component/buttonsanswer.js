@@ -3,25 +3,43 @@
 import { connect } from 'react-redux';
 
 import React, { PropTypes } from 'react';
-import { View, Button } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import { submitButtonsAnswer } from '../actions/answer';
 
 
-const BUTTON_COLOR = 'yellow';
+const styles = StyleSheet.create({
+    inner: {
+        flex: 1,
+        alignContent: 'center',
+        marginTop:15,
+        marginBottom:10,
+        marginRight:20,
+        marginLeft:20,
+    },
+    button: {
+        padding: 5,
+        marginTop: 5,
+        backgroundColor: 'cyan',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+});
 
-
-const ButtonsAnswer = ({buttonsinfo, buttoncolor, onPress}) => {
+const ButtonsAnswer = ({buttonsinfo, onPress}) => {
     return (
         <View>
+        <View style={styles.inner}>
             {buttonsinfo.map( (item) => 
-                <Button
-                    title={item.name}
-                    color={buttoncolor}
+                <TouchableOpacity
                     key={item.name}
+                    style={styles.button}
                     onPress={ () => onPress(item) }
-                />
+                >
+                    <Text>{item.name}</Text>
+                </TouchableOpacity>
             )}
+        </View>
         </View>
     )
 };
@@ -29,7 +47,6 @@ const ButtonsAnswer = ({buttonsinfo, buttoncolor, onPress}) => {
 
 ButtonsAnswer.propTypes = {
     buttonsinfo: PropTypes.array.isRequired,
-    buttoncolor: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired
 };
 
@@ -40,7 +57,6 @@ const mapStateToProps = state => ({
             name: v.button_response_text
         }
     }),
-    buttoncolor: BUTTON_COLOR,
 });
 
 const mapDispatchToProps = dispatch => ({

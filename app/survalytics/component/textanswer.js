@@ -2,37 +2,42 @@
 
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
-import { StyleSheet, View, TextInput, Text, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity } from 'react-native';
 
 import { submitTextAnswer, changeTextAnswer } from '../actions/answer';
 
-const SUBMITCOLOR = 'yellow';
+const SUBMITCOLOR = 'grey';
 
 const styles = StyleSheet.create({
     textinputstyle: {
-        margin: 15,
+        margin: 5,
         height: 40,
         borderColor: 'grey',
         borderWidth: 1
     },
-    labelstyle: {
-        color: 'blue',
-    }
+    button: {
+        padding: 5,
+        marginTop: 5,
+        backgroundColor: 'cyan',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 });
 
 const TextAnswer = ({ text, onChangeText, onSubmitPress }) => (
     <View>
         <TextInput
-            style={styles.textinputstyle }
+            style={styles.textinputstyle}
             placeholder="placeholder"
             onChangeText={ (text) => onChangeText(text) }
             value={text} 
         />
-        <Button 
+        <TouchableOpacity 
             onPress={onSubmitPress}
-            title="Submit"
-            color= {SUBMITCOLOR}
-        />
+            style={styles.button}
+        >
+            <Text>Submit</Text>
+        </TouchableOpacity>
     </View>
 );
 

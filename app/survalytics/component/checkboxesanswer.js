@@ -2,38 +2,58 @@
 
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import CheckBox from 'react-native-checkbox';
 
 import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../actions/answer';
 
 
-const SUBMITCOLOR = 'yellow';
-
 const styles = StyleSheet.create({
     labelstyle: {
-        color: 'red',
-    }
+        color: 'black',
+    },
+    inner: {
+        flex: 1,
+        alignContent: 'center',
+        marginTop:15,
+        marginBottom:10,
+        marginRight:20,
+        marginLeft:20,
+    },
+    buttontext: {
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    button: {
+        padding: 5,
+        marginTop: 5,
+        backgroundColor: 'cyan',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 });
 
 
 const CheckBoxesAnswer = ({checkboxesinfo, onChange, onSubmitPress}) => {
     return (
         <View>
-            { checkboxesinfo.map( (item) => 
-                <CheckBox
-                    key={item.name}
-                    labelStyle={styles.labelstyle} 
-                    label={item.name} 
-                    checked={item.result}
-                    onChange={ (current_value) => { onChange(item, !current_value); } }
-                />
-            )}
-            <Button 
+            <View style={styles.inner}>
+                { checkboxesinfo.map( (item) => 
+                    <CheckBox
+                        key={item.name}
+                        labelStyle={styles.labelstyle} 
+                        label={item.name} 
+                        checked={item.result}
+                        onChange={ (current_value) => { onChange(item, !current_value); } }
+                    />
+                )}
+            </View>
+            <TouchableOpacity 
+                style={styles.button}
                 onPress={onSubmitPress}
-                title="Submit"
-                color= {SUBMITCOLOR}
-            />
+            >
+                <Text>Submit</Text>
+            </TouchableOpacity>
         </View>
     )
 };
