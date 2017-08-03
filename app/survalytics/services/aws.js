@@ -9,7 +9,7 @@ import { GetAllQuestions, DeleteQuestionsByGuid, DeleteQuestion, GetQuestion, In
 import { NewQuestion, DeleteQuestionGUID } from './question';
 
 
-var awsConstants = require('../assets/aws.secret.json');
+var awsConstants = require('../assets/aws.ouchapp.secret.json');
 
 var myCredentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: awsConstants.IDENTITY_POOL_ID,
