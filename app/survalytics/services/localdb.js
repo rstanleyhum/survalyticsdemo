@@ -213,17 +213,29 @@ export const GetAllQuestions = () => {
 export const GetQuestion = (guid) => {
     var p = new Promise( (resolve, reject) => {
         var result = {};
+        var success = false;
         var args = [
             guid
         ];
-        
         db.transaction(
             tx => {
                 tx.executeSql(SELECT_QUESTION_BY_GUID_SQL, args, (tx, rs) => {
-                        if (rs.length > 1) {
-                            reject(new Error("database corrupted two questions with same guid"));
+                        if (rs.rows.length > 1) {
+                            success = false;
+                            console.log("database corrupted two questions with same guid: ", args);
+                            resolve(null);
                         }
-                        result = rs.rows._array.slice()[0]
+                        
+                        if (rs.rows.length == 0) {
+                            success = false;
+                            console.log("no question found: ", args)
+                            resolve(null);
+                        }
+
+                        if (rs.rows.length == 1) {
+                            success = true;
+                            result = rs.rows.item(0)
+                        }
                     },
                     (_, err) => {
                         console.log("ERROR (GetQuestion): ExecuteSQL", err);
@@ -236,8 +248,13 @@ export const GetQuestion = (guid) => {
                 resolve(null);
             },
             () => {
-                var item2 = result;
+                if (!success) {
+                    console.log("no success: ", args);
+                    resolve(null);
+                }
 
+                var item2 = result;
+                
                 NewQuestion(
                     item2.questionguid_str,
                     item2.json_str,
@@ -250,6 +267,7 @@ export const GetQuestion = (guid) => {
                     resolve(q);
                 })
                 .catch( (err) => {
+                    console.log("ERROR: (GetQuestion): CreateQuestion promise chain:", args);
                     console.log("ERROR: (GetQuestion): CreateQuestion promise chain:", err)
                     resolve(null);
                 });
@@ -353,7 +371,10 @@ export const GetNextUnansweredQuestion = () => {
             () => { 
                 var found = false;
                 var num_results = row_results.length;
-
+                let print_questions = row_results.map( (itemx, idx) => {
+                    return itemx.questionguid_str;
+                })
+                console.log("GetNextUnansweredQuestion: ", print_questions);
                 let create_questions = row_results.map( (item1, idx) => {
                     return NewQuestion(
                         item1.questionguid_str,
