@@ -374,7 +374,7 @@ export const GetNextUnansweredQuestion = () => {
                 let print_questions = row_results.map( (itemx, idx) => {
                     return itemx.questionguid_str;
                 })
-                console.log("GetNextUnansweredQuestion: ", print_questions);
+
                 let create_questions = row_results.map( (item1, idx) => {
                     return NewQuestion(
                         item1.questionguid_str,
