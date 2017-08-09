@@ -23,6 +23,10 @@ export function setSkippedSurvey(value) {
 
 export function setNewQuestion() {
     return (dispatch, getState) => {
+        if(getState().survalytic.status.loadingQuestion) {
+            return
+        }
+
         dispatch(loadingQuestion(true));
 
         GetNextUnansweredQuestion()

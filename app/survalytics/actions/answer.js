@@ -16,6 +16,10 @@ export const CREATE_RESPONSE = 'CREATE_RESPONSE';
 
 export function submitAnswer() {
     return (dispatch, getState) => {
+        if (getState().survalytic.status.submittingResponse) {
+            return
+        }
+
         dispatch(submittingResponse(true));
         
         dispatch(updateQuestionWithResponse());
@@ -29,8 +33,10 @@ export function submitAnswer() {
                 })
                 .then( () => {
                     dispatch(setNewQuestion());
+                    dispatch(submittingResponse(false));
                 })
                 .catch( (err) => {
+                    dispatch(submittingResponse(false));
                     console.log(err);
                 });
     };
@@ -51,7 +57,11 @@ export function updateQuestionWithResponse() {
 
 
 export function submitTextAnswer() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        if(getState().survalytic.status.submittingResponse) {
+            return
+        }
+
         dispatch(submitAnswer())
     };
 }
@@ -66,7 +76,11 @@ export function changeTextAnswer(text) {
 
 
 export function submitSliderAnswer() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        if (getState().survalytic.status.submittingResponse) {
+            return
+        }
+
         dispatch(submitAnswer());
     }
 }
@@ -82,6 +96,10 @@ export function updateSliderValue(value) {
 
 export function submitButtonsAnswer(item) {
     return (dispatch, getState) => {
+        if (getState().survalytic.status.submittingResponse) {
+            return
+        }
+
         dispatch(setButtonsAnswer(item))
 
         dispatch(submitAnswer());
@@ -98,7 +116,11 @@ export function setButtonsAnswer(item) {
 
 
 export function submitCheckBoxesAnswer() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        if (getState().survalytic.status.submittingResponse) {
+            return
+        }
+        
         dispatch(submitAnswer());
     };
 }
