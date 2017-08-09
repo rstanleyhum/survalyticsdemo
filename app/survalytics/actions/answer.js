@@ -4,6 +4,7 @@ import { NavigationActions } from 'react-navigation';
 import { UpdateQuestions, InsertResponse } from '../services/localdb';
 import { NewResponseFromQuestion } from '../services/response';
 import { setNewQuestion } from './questions';
+import { submittingResponse } from './status';
 
 export const CHANGE_TEXT_ANSWER = 'CHANGE_TEXT_ANSWER';
 export const UPDATE_SLIDER_VALUE = 'UPDATE_SLIDER_VALUE';
@@ -34,6 +35,7 @@ export function submitAnswer() {
                 });
     };
 };
+
 
 export function createReponse() {
     return {
@@ -80,8 +82,9 @@ export function updateSliderValue(value) {
 
 export function submitButtonsAnswer(item) {
     return (dispatch, getState) => {
-            dispatch(setButtonsAnswer(item));
-            return dispatch(submitAnswer());
+        dispatch(setButtonsAnswer(item))
+
+        dispatch(submitAnswer());
     };
 };
 

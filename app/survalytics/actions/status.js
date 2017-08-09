@@ -46,3 +46,10 @@ export function uploadingResponses(value) {
         console.log("uploadingResponses: " + value);
     };
 };
+
+
+export function submittingResponse(value) {
+    return (dispatch) => {
+        console.log("submittingResponse: " + value);
+    }
+}
