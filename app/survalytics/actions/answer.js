@@ -15,7 +15,8 @@ export const CREATE_RESPONSE = 'CREATE_RESPONSE';
 
 export function submitAnswer() {
     return (dispatch, getState) => {
-        //dispatch(submittingResponse(true));
+        dispatch(submittingResponse(true));
+        
         dispatch(updateQuestionWithResponse());
     
         return UpdateQuestions([getState().survalytic.currentq.question])

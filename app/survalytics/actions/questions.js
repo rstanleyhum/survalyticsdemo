@@ -23,9 +23,8 @@ export function setSkippedSurvey(value) {
 
 export function setNewQuestion() {
     return (dispatch, getState) => {
-        // if getState loadingQuestion then resolve()
-
         dispatch(loadingQuestion(true));
+
         GetNextUnansweredQuestion()
             .then( (q) => {
                 dispatch(setCurrentQuestion(q));
