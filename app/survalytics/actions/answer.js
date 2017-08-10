@@ -1,6 +1,5 @@
 'use strict';
 
-import { NavigationActions } from 'react-navigation';
 import { UpdateQuestions, InsertResponse } from '../services/localdb';
 import { NewResponseFromQuestion } from '../services/response';
 import { setNewQuestion } from './questions';

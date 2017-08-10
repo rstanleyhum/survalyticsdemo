@@ -3,7 +3,6 @@
 import { connect } from 'react-redux';
 import React, { PropTypes } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import HTMLView from 'react-native-htmlview';
 
 import Answer from './answer';
