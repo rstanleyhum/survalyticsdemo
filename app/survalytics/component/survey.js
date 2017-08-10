@@ -3,7 +3,7 @@
 import { connect } from 'react-redux';
 
 import React, { PropTypes } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
 import Question from './question';
 
@@ -11,9 +11,6 @@ import Question from './question';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignContent: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'grey',
     },
 });
 
@@ -21,7 +18,9 @@ const styles = StyleSheet.create({
 const Survey = ({question, skipped}) => {
     if ((!skipped) && (typeof question != 'undefined') && (question != null)) {
         return (
-            <Question />
+            <ScrollView style={styles.container} >
+                <Question />
+            </ScrollView>
         );
     } else {
         return null; 

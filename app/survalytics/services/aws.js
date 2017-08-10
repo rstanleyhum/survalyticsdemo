@@ -46,7 +46,7 @@ export const Download = (immediate = false) => {
 
         }).then( async (data) => {
             current_size = data.Table.TableSizeBytes;
-            let old_size = parseInt(await AsyncStorage.getItem('@TableSize')) || 0;
+            let old_size = parseInt(await AsyncStorage.getItem('@TableSize:key')) || 0;
 
             if ((current_size == old_size) && !immediate) {
                 throw false;

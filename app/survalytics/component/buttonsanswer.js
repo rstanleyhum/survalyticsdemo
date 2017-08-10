@@ -7,39 +7,23 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import { submitButtonsAnswer } from '../actions/answer';
 
+import styles from './stylesheets';
 
-const styles = StyleSheet.create({
-    inner: {
-        flex: 1,
-        alignContent: 'center',
-        marginTop:15,
-        marginBottom:10,
-        marginRight:20,
-        marginLeft:20,
-    },
-    button: {
-        padding: 5,
-        marginTop: 5,
-        backgroundColor: 'cyan',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-});
 
 const ButtonsAnswer = ({buttonsinfo, onPress}) => {
     return (
         <View>
-        <View style={styles.inner}>
-            {buttonsinfo.map( (item) => 
-                <TouchableOpacity
-                    key={item.name}
-                    style={styles.button}
-                    onPress={ () => onPress(item) }
-                >
-                    <Text>{item.name}</Text>
-                </TouchableOpacity>
-            )}
-        </View>
+            <View style={styles.inner}>
+                {buttonsinfo.map( (item) => 
+                    <TouchableOpacity
+                        key={item.name}
+                        style={styles.answerbutton}
+                        onPress={ () => onPress(item) }
+                    >
+                        <Text>{item.name}</Text>
+                    </TouchableOpacity>
+                )}
+            </View>
         </View>
     )
 };

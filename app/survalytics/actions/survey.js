@@ -52,6 +52,7 @@ export function downloadSurvey(immediate = false) {
                 } else {
                     dispatch(hasNewQuestions(false));
                 }
+                dispatch(viewQuestions());
             })
             .catch( (err) => {
                 dispatch(logError("downloadSurvey", err));

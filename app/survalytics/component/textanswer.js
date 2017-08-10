@@ -6,23 +6,8 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity } from 'react-nativ
 
 import { submitTextAnswer, changeTextAnswer } from '../actions/answer';
 
-const SUBMITCOLOR = 'grey';
+import styles from './stylesheets';
 
-const styles = StyleSheet.create({
-    textinputstyle: {
-        margin: 5,
-        height: 40,
-        borderColor: 'grey',
-        borderWidth: 1
-    },
-    button: {
-        padding: 5,
-        marginTop: 5,
-        backgroundColor: 'cyan',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-});
 
 const TextAnswer = ({ text, onChangeText, onSubmitPress }) => (
     <View>
@@ -34,7 +19,7 @@ const TextAnswer = ({ text, onChangeText, onSubmitPress }) => (
         />
         <TouchableOpacity 
             onPress={onSubmitPress}
-            style={styles.button}
+            style={styles.answerbutton}
         >
             <Text>Submit</Text>
         </TouchableOpacity>

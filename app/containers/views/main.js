@@ -13,36 +13,18 @@ import { GetAWSReturnData, InsertIntoLocalDB } from '../../services/testing';
 
 import Survey from '../../survalytics/component/survey';
 
+import styles from '../../survalytics/component/stylesheets';
 
 
-const HEADER = '#3b5998'
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignContent: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'grey',
-        marginTop:20,
-    },
-    button: {
-        padding:20,
-        borderRadius:20,
-        backgroundColor: 'blue',
-        marginTop:20,
-        alignContent: 'center',
-        justifyContent: 'center'
-    }
-});
 
 
 const Main = ({onDeleteAll, onViewQuestions, onDownload, onUpload, resetSkip }) => (
-    <ScrollView>
-        <View style={styles.container}>
-            <Text>{ 'Survalytics Demo App' }</Text>
+    <View style={styles.maincontainer} >
+        <Text>{ 'Survalytics Demo App' }</Text>
 
-            <Survey />
-
+        <Survey />
+        <View style={styles.container} >
+            <ScrollView>
             <TouchableOpacity
                 onPress={ async () => { console.log(JSON.stringify(await GetAllQuestions(), null, 2)); } }
                 style={styles.button} >
@@ -90,9 +72,10 @@ const Main = ({onDeleteAll, onViewQuestions, onDownload, onUpload, resetSkip }) 
                 style={styles.button} >
                 <Text>{'Upload TO AWS'}</Text>
             </TouchableOpacity>
-
+            </ScrollView>
         </View>
-    </ScrollView>
+
+    </View>
 );
 
 

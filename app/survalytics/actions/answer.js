@@ -4,6 +4,8 @@ import { UpdateQuestions, InsertResponse } from '../services/localdb';
 import { NewResponseFromQuestion } from '../services/response';
 import { setNewQuestion } from './questions';
 import { submittingResponse } from './status';
+import { uploadResponses } from './survey';
+
 import { logError } from './logging';
 
 export const CHANGE_TEXT_ANSWER = 'CHANGE_TEXT_ANSWER';
@@ -25,20 +27,31 @@ export function submitAnswer() {
         dispatch(updateQuestionWithResponse());
     
         return UpdateQuestions([getState().survalytic.currentq.question])
-                .then( () => {
-                    return NewResponseFromQuestion(getState().survalytic.currentq.question);
-                })
-                .then( (r) => {
-                    return InsertResponse(r);
-                })
-                .then( () => {
-                    dispatch(setNewQuestion());
+            .then( () => {
+                return NewResponseFromQuestion(getState().survalytic.currentq.question);
+            })
+            .then( (r) => {
+                return InsertResponse(r);
+            })
+            .then(
+                () => {
+                    return dispatch(setNewQuestion())
+                },
+                (error) => {
+                    // could not insert response so no new questions
+                    return Promise.resolve(true);
+                }
+            )
+            .then(
+                () => {
                     dispatch(submittingResponse(false));
-                })
-                .catch( (err) => {
-                    dispatch(submittingResponse(false));
-                    dispatch(logError("submitAnswer", err));
-                });
+                    dispatch(uploadResponses());
+                }
+            )
+            .catch( (err) => {
+                dispatch(submittingResponse(false));
+                dispatch(logError("submitAnswer", err));
+            });
     };
 };
 

@@ -7,31 +7,7 @@ import CheckBox from 'react-native-checkbox';
 
 import { submitCheckBoxesAnswer, changeCheckBoxValue } from '../actions/answer';
 
-
-const styles = StyleSheet.create({
-    labelstyle: {
-        color: 'black',
-    },
-    inner: {
-        flex: 1,
-        alignContent: 'center',
-        marginTop:15,
-        marginBottom:10,
-        marginRight:20,
-        marginLeft:20,
-    },
-    buttontext: {
-        alignContent: 'center',
-        justifyContent: 'center',
-    },
-    button: {
-        padding: 5,
-        marginTop: 5,
-        backgroundColor: 'cyan',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-});
+import styles from './stylesheets';
 
 
 const CheckBoxesAnswer = ({checkboxesinfo, onChange, onSubmitPress}) => {
@@ -49,7 +25,7 @@ const CheckBoxesAnswer = ({checkboxesinfo, onChange, onSubmitPress}) => {
                 )}
             </View>
             <TouchableOpacity 
-                style={styles.button}
+                style={styles.answerbutton}
                 onPress={onSubmitPress}
             >
                 <Text>Submit</Text>

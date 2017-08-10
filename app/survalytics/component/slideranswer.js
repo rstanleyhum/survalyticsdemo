@@ -6,46 +6,8 @@ import { StyleSheet, View, Text, Slider, TouchableOpacity } from 'react-native';
 
 import { updateSliderValue, submitSliderAnswer } from '../actions/answer';
 
+import styles from './stylesheets';
 
-const SUBMITCOLOR = 'grey';
-
-
-const styles = StyleSheet.create({
-    sliderrangelabelstyleleft: {
-        color: 'black',
-    },
-    sliderrangelabelstyleright: {
-        color: 'black',
-    },
-    sliderlabelstyle: {
-        color: 'black',
-        alignContent: 'center',
-        textAlign: 'center'
-    },
-    sliderstyle: {
-        backgroundColor: 'grey',
-    },
-    sliderlabelcontainer: {
-        justifyContent: 'space-between',
-        flex: 1,
-        flexDirection: 'row',
-    },
-    inner: {
-        flex: 1,
-        alignContent: 'center',
-        marginTop:15,
-        marginBottom:10,
-        marginRight:20,
-        marginLeft:20,
-    },
-    button: {
-        padding: 5,
-        marginTop: 5,
-        backgroundColor: 'cyan',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-})
 
 
 const SliderAnswer = ({value, maxvalue, minvalue, onValueChange, onSubmitPress}) => (
@@ -65,7 +27,7 @@ const SliderAnswer = ({value, maxvalue, minvalue, onValueChange, onSubmitPress})
         </View>
         <TouchableOpacity 
             onPress={onSubmitPress}
-            style={styles.button}
+            style={styles.answerbutton}
         >
             <Text>Submit</Text>
         </TouchableOpacity>

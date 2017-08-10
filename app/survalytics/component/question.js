@@ -8,41 +8,11 @@ import HTMLView from 'react-native-htmlview';
 import Answer from './answer';
 import { setSkippedSurvey } from '../actions/questions';
 
+import styles from './stylesheets';
 
-const styles = StyleSheet.create({
-    p: {
-        fontWeight: '300',
-        color: 'black',
-    },
-    container: {
-        flex: 1,
-        alignContent: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'grey',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop:10,
-        marginBottom:10
-    },
-    skipbutton: {
-        padding: 5,
-        marginTop: 5,
-        backgroundColor: 'cyan',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    inner: {
-        flex: 1,
-        alignContent: 'center',
-        marginTop:15,
-        marginBottom:10,
-        marginRight:20,
-        marginLeft:20,
-    }
-});
 
 const Question = ({onSkipPressed, htmlcontent}) => (
-    <View style={styles.container}>
+    <View style={styles.questioncontainer}>
         <TouchableOpacity
             onPress={onSkipPressed}
             style={styles.skipbutton}
