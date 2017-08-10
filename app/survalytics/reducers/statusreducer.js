@@ -10,6 +10,7 @@ import {
     SET_UPLOADING_RESPONSES,
     SET_SUBMITTING_RESPONSE
 } from '../actions/status';
+import { SET_LOGVALUE } from '../actions/logging';
 
 
 const initialState = {
@@ -20,7 +21,8 @@ const initialState = {
     hasServerError: false,
     loadingQuestion: false,
     uploadingResponses: false,
-    submittingResponse: false
+    submittingResponse: false,
+    logValueString: ""
 }
 
 
@@ -63,6 +65,11 @@ function StatusReducer(state = initialState, action) {
                 submittingResponse: action.value
             });
 
+        case SET_LOGVALUE:
+            var logValueString = [action.functionName, action.logType, action.msg].join("::");
+            return Object.assign({}, state, {
+                logValueString: logValueString
+            });
 
         default:
             return state;

@@ -26,7 +26,7 @@ export const GetGeolocation = (lat, long, accuracy) => {
                 resolve(result);
             })
             .catch( (err) => {
-                console.log("ERROR: GetGeolocation: Catch:", err);
+                // TODO: Need to fix: ignores errors
                 resolve(null);
             });
     });
@@ -50,7 +50,7 @@ export const GetIpApiInfo = () => {
                 resolve(result);
             })
             .catch( (err) => {
-                console.log("ERROR: GetIpApiInfo: Catch:", err);
+                // TODO: Need to fix: ignores errors
                 resolve(null);
             });
     });

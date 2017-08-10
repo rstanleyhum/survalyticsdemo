@@ -6,7 +6,7 @@ import { Download, Upload } from '../services/aws';
 import { uploadingResponses, deletingAllQuestions, downloadingSurvey, hasNewQuestions, hasServerError, loadingQuestion } from './status';
 import { setNewQuestion, setCurrentQuestion } from './questions';
 import { setSkippedSurvey } from './questions';
-
+import { logError } from './logging';
 
 
 export function resetSkipSurvey() {
@@ -30,7 +30,7 @@ export function deleteAllQuestions() {
             })
             .catch( (err) => {
                 dispatch(deletingAllQuestions(false));
-                console.log("ERROR (deleteAllQuestions): ", err);
+                dispatch(logError("deleteAllQuestions", err));
             });
     };
 };
@@ -54,7 +54,7 @@ export function downloadSurvey(immediate = false) {
                 }
             })
             .catch( (err) => {
-                console.log("ERROR: (downloadSurvey): ", err);
+                dispatch(logError("downloadSurvey", err));
                 dispatch(downloadingSurvey(false));
                 dispatch(hasServerError(true));
             });

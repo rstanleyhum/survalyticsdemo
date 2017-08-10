@@ -2,6 +2,7 @@
 
 import { GetNextUnansweredQuestion } from '../services/localdb';
 import { loadingQuestion } from './status';
+import { logError } from './logging';
 
 export const SET_CURRENT_QUESTION = 'SET_CURRENT_QUESTION';
 export const SET_SKIPPED_SURVEY = 'SET_SKIPPED_SURVEY';
@@ -37,7 +38,7 @@ export function setNewQuestion() {
                 dispatch(loadingQuestion(false));
             })
             .catch( (err) => {
-                console.log("ERROR: (setNewQuestion): ", err);
+                dispatch(logError("setNewQuestion", err));
                 dispatch(loadingQuestion(false));
             });
     };

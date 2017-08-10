@@ -59,8 +59,8 @@ export const SetupLocalDB = () => {
     var p = new Promise( (resolve, reject) => {
             db.transaction(
             tx => {
-                tx.executeSql(CREATE_QUESTION_TABLE_SQL, [], () => {}, () => {console.log("ERROR: (SetupLocalDB - CREATE_QUESTION_TABLE_SQL):")} );
-                tx.executeSql(CREATE_RESPONSE_TABLE_SQL, [], () => {}, () => {console.log("ERROR: (SetupLocalDB - CREATE_RESPONSE_TABLE_SQL):")} );
+                tx.executeSql(CREATE_QUESTION_TABLE_SQL, [], () => {}, () => {reject("ERROR: (SetupLocalDB - CREATE_QUESTION_TABLE_SQL):")} );
+                tx.executeSql(CREATE_RESPONSE_TABLE_SQL, [], () => {}, () => {reject("ERROR: (SetupLocalDB - CREATE_RESPONSE_TABLE_SQL):")} );
             },
             (err) => {
                 resolve(false);
@@ -92,12 +92,12 @@ export const InsertQuestion = (q) => {
                     resolve(true);
                 },
                 (tx, err) => {
-                    console.log("ERROR: (InsertQuestion - ExecuteSQL):", err);
+                    // TODO: Need to fix: ignores error
                     resolve(false);
                 })
             },
             (err) => {
-                console.log("ERROR: (InsertQuestion - Transaction):", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             },
             () => {
@@ -128,12 +128,12 @@ export const UpdateQuestion = (q) => {
                     resolve(true);
                 },
                 (tx, err) => {
-                    console.log("ERROR: (UpdateQuestion - ExecuteSQL):", err);
+                    //TODO: Need to fix: ignores error
                     resolve(false);
                 })
             },
             (err) => {
-                console.log("ERROR: (UpdateQuestion - ExecuteSQL):", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             },
             () => {
@@ -156,7 +156,7 @@ export const UpdateQuestions = (questions) => {
                 resolve(true);
             })
             .catch( (err) => {
-                console.log("ERROR (UpdateQuestions):", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             }); 
     });
@@ -174,7 +174,7 @@ export const InsertQuestions = (questions) => {
                 resolve(true);
             })
             .catch( (err) => {
-                console.log("ERROR (InsertQuestions): ", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             }); 
     });
@@ -194,11 +194,11 @@ export const GetAllQuestions = () => {
                     questions = Promise.all(create_questions);
                 },
                 (tx, err) => {
-                    console.log("ERROR (GetAllQuestions): ExecuteSQL:", err);
+                    //TODO: Need to fix: ignores error
                 })
             },
             (err) => {
-                console.log("ERROR (GetAllQuestions): Transaction:", err);
+                //TODO: Need to fix: ignores error
                 reject([]);
             },
             () => {
@@ -222,13 +222,13 @@ export const GetQuestion = (guid) => {
                 tx.executeSql(SELECT_QUESTION_BY_GUID_SQL, args, (tx, rs) => {
                         if (rs.rows.length > 1) {
                             success = false;
-                            console.log("database corrupted two questions with same guid: ", args);
+                            //TODO: Need to fix: ignores error
                             resolve(null);
                         }
                         
                         if (rs.rows.length == 0) {
                             success = false;
-                            console.log("no question found: ", args)
+                            //TODO: Need to fix: ignores error
                             resolve(null);
                         }
 
@@ -238,18 +238,18 @@ export const GetQuestion = (guid) => {
                         }
                     },
                     (_, err) => {
-                        console.log("ERROR (GetQuestion): ExecuteSQL", err);
+                        //TODO: Need to fix: ignores error
                         resolve(null);
                     }
                 );
             },
             (err) => {
-                console.log("ERROR (GetQuestion): Transaction:", err);
+                //TODO: Need to fix: ignores error
                 resolve(null);
             },
             () => {
                 if (!success) {
-                    console.log("no success: ", args);
+                    //TODO: Need to fix: ignores error
                     resolve(null);
                 }
 
@@ -267,8 +267,7 @@ export const GetQuestion = (guid) => {
                     resolve(q);
                 })
                 .catch( (err) => {
-                    console.log("ERROR: (GetQuestion): CreateQuestion promise chain:", args);
-                    console.log("ERROR: (GetQuestion): CreateQuestion promise chain:", err)
+                    //TODO: Need to fix: ignores error
                     resolve(null);
                 });
             }
@@ -292,10 +291,10 @@ export const DeleteQuestionByGuid = (guid) => {
             tx => {
                 tx.executeSql(DELETE_QUESTION_BY_QUESTIONGUID_SQL, [], () => {},
                     (tx, err) => {
-                        console.log("ERROR (DeleteQuestionByGUID): ExecuteSQL:", tx, err)
+                        //TODO: Need to fix: ignores error
                     });
                 (err) => {
-                    console.log("ERROR (DeleteQuestionByGUID): Tranaction:", err);
+                    //TODO: Need to fix: ignores error
                     resolve(false);
                 },
                 () => {
@@ -319,7 +318,7 @@ export const DeleteQuestionsByGuid = (questionguids) => {
                 resolve(true);
             })
             .catch( (err) => {
-                console.log("ERROR (DeleteQuestionsByGuid):", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             });
     });
@@ -333,11 +332,11 @@ export const DeleteAllQuestions = () => {
             tx => {
                 tx.executeSql(DELETE_ALL_QUESTIONS_SQL, [], () => {},
                     (_, err) => {
-                        console.log("ERROR (DeleteAllQuestions): ExecuteSQL:", err);
+                        //TODO: Need to fix: ignores error
                     });
             },
             (err) => {
-                console.log("ERROR (DeleteAllQuestions): Transaction", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             },
             () => {
@@ -360,12 +359,12 @@ export const GetNextUnansweredQuestion = () => {
                         };
                     },
                     (_, err) => {
-                        console.log("ERROR: GetNextUnansweredQuestion: ExecuteSQL:", err);
+                        //TODO: Need to fix: ignores error
                     }
                 );
             },
             (err) => {
-                console.log("ERROR: GetNextUnansweredQuestion: Tranaction:", err);
+                //TODO: Need to fix: ignores error
                 resolve(null);
             },
             () => { 
@@ -412,7 +411,8 @@ export const GetNextUnansweredQuestion = () => {
                         resolve(null);
                     })
                     .catch( (err) => {
-                        console.log("ERROR: (GetNextUnansweredQuestion): Catch:", err);
+                        //TODO: Need to fix: ignores error
+                        resolve(null);
                     });
             }
         );
@@ -431,11 +431,11 @@ export const InsertResponse = (r) => {
             tx => {
                 tx.executeSql(INSERT_RESPONSES_SQL, args, () => {},
                     (_, err) => {
-                        console.log("ERROR: InsertResponse: ExecuteSQL:", err);
+                        //TODO: Need to fix: ignores error
                     });
             },
             (err) => {
-                console.log("ERROR: InsertResponse: Transaction:", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             },
             () => {
@@ -458,7 +458,7 @@ export const InsertResponses = (responses) => {
                 resolve(true);
             })
             .catch( (err) => {
-                console.log("ERROR: InsertResponses: Catch:", err);
+                //TODO: Need to fix: ignores error
                 reject(false);
             });
      });
@@ -478,11 +478,11 @@ export const GetResponsesToUpload = () => {
                     responses = Promise.all(create_responses);
                 },
                 (_, err) => {
-                    console.log("ERROR: GetResponsesToUpload: ExecuteSQL:", err);
+                    //TODO: Need to fix: ignores error
                 });
             },
             (err) => {
-                console.log("ERROR: GetResponsesToUpload: Transaction:", err);
+                //TODO: Need to fix: ignores error
                 reject(err);
             },
             () => { 
@@ -500,11 +500,11 @@ export const DeleteResponseByID = (rid) => {
             tx => {
                 tx.executeSql(DELETE_REPSONSE_BY_ID_SQL, args, () => {},
                     (_, err) => {
-                        console.log("ERROR: DeleteResponseByID: ExecuteSQL:", err);
-                    });
+                        //TODO: Need to fix: ignores error
+                });
             },
             (err) => {
-                console.log("ERROR: DeleteResponseByID: Transaction:", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             },
             () => {
@@ -539,11 +539,11 @@ export const DeleteAllResponses = () => {
             tx => {
                 tx.executeSql(DELETE_ALL_RESPONSES_SQL, [], () => {}, 
                     (_, err) => {
-                        console.log("ERROR: DeleteAllResponses: ExecuteSQL:", err);
+                        //TODO: Need to fix: ignores error
                     } );
             },
             (err) => {
-                console.log("ERROR: DeleteAllResponses: Transaction: ", err);
+                //TODO: Need to fix: ignores error
                 resolve(false);
             },
             () => {

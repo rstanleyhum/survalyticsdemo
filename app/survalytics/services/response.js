@@ -25,8 +25,8 @@ export const NewResponse = (id, json, uploaded) => {
                     resolve(result);
                 })
                 .catch( (err) => {
-                    console.log("ERROR: NewResponse: _addHeader chain:", err);
-                    reject(null);
+                    // TODO: Need to fix: ignores error
+                    resolve(null);
                 });
         } else {
             resolve(result);
@@ -82,7 +82,7 @@ const _addHeader = async (json) => {
                 resolve(newresult);
             })
             .catch( (err) => {
-                console.log("ERROR: _addHeader: Catch:", err);
+                // TODO: Need to fix: ignores error
                 resolve(null);
             });
     });

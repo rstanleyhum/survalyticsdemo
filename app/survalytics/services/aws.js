@@ -21,7 +21,8 @@ var dynamodb = new AWS.DynamoDB({
     credentials: myCredentials,
     region: awsConstants.AWS_US_WEST2_REGION,
     endpoint: awsConstants.AWS_US_WEST2_ENDPOINT,
-    dynamoDbCrc32: false
+    dynamoDbCrc32: false,
+    correctClockSkew: true
 });
 
 var docclient = new AWS.DynamoDB.DocumentClient({
@@ -68,8 +69,7 @@ export const Download = (immediate = false) => {
             await AsyncStorage.setItem('@TableSize:key', current_size.toString());
             resolve(true);
         }).catch( (err) => {
-            console.log("ERROR: (Download): ", err);
-            reject(false);
+            reject("ERROR: Download: " + err);
         });
     });
     return p;
@@ -159,11 +159,20 @@ const _processDownloadedData = async (server_questions_json, local_questions) =>
 
 const _getLocationAsync = () => {
     if (Platform.OS === 'android' && !Constants.isDevice) {
-        console.log("INFO: (_getLocationAsync): Location does not work on Android emulator");
+        
+        // INFO: Location does not work on Android emulator
         return Promise.resolve(null);
     }
-
-    return Promise.resolve(Location.getCurrentPositionAsync({}));
+    var p = new Promise( (resolve, reject) => {
+        Location.getCurrentPositionAsync({})
+            .then( (location) => {
+                resolve(location);
+            })
+            .catch( (err) => {
+                resolve(null);
+            }); 
+    });
+    return p;
 };
 
 
@@ -174,13 +183,14 @@ export const Upload = () => {
 
         IsOnline()
             .then( (isConnected) => {
+
                 if (!isConnected) {
                     throw false;
                 }
                 return _getLocationAsync();
             })
             .then( (location) => {
-                
+
                 return Promise.all([
                     GetResponsesToUpload(),
                     location != null ? GetGeolocation(location.coords.latitude, location.coords.longitude, location.coords.accuracy) : Promise.resolve(null),
@@ -188,6 +198,7 @@ export const Upload = () => {
                 ]);
             })
             .then( (data) => {
+
                 var responses = data[0];
                 var geolocation = data[1] || {};
                 var ipapiinfo = data[2] || {};
@@ -212,6 +223,7 @@ export const Upload = () => {
                 return Promise.all(allitems);
             })
             .then( (ids_to_delete) => {
+
                 let final_ids_to_delete = ids_to_delete.filter( (item) => {
                     return item;
                 });
@@ -226,7 +238,7 @@ export const Upload = () => {
                 resolve(true);
             })
             .catch( (err) => {
-                console.log("ERROR: (Upload):", err);
+                var status = "ERROR: (Upload):", err
                 reject(status);
             });
     });
@@ -237,7 +249,7 @@ const _putItem = (id, params) => {
     var p = new Promise( (resolve, reject) => {
         docclient.put(params, function(err, data) {
             if (err) {
-                console.log("ERROR: (_putItem):", err);
+                // TODO: Need to fix: if there was an error then ignore it
                 resolve(null);
             } else {
                 resolve(id);

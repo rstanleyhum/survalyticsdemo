@@ -5,6 +5,7 @@ import { UpdateQuestions, InsertResponse } from '../services/localdb';
 import { NewResponseFromQuestion } from '../services/response';
 import { setNewQuestion } from './questions';
 import { submittingResponse } from './status';
+import { logError } from './logging';
 
 export const CHANGE_TEXT_ANSWER = 'CHANGE_TEXT_ANSWER';
 export const UPDATE_SLIDER_VALUE = 'UPDATE_SLIDER_VALUE';
@@ -37,7 +38,7 @@ export function submitAnswer() {
                 })
                 .catch( (err) => {
                     dispatch(submittingResponse(false));
-                    console.log(err);
+                    dispatch(logError("submitAnswer", err));
                 });
     };
 };
