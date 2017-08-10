@@ -1,6 +1,8 @@
 'use strict';
 import { AsyncStorage } from 'react-native';
 
+const uuidv4 = require('uuid/v4');
+
 import { GetDeviceInfo, GetLocalInfo } from './device';
 import { APPLICATION_VERSION, APPLICATION_NAMESPACE } from '../config/constants';
 
@@ -89,3 +91,23 @@ const _addHeader = async (json) => {
     return p;
 };
 
+
+export const SetUserGUID = () => {
+    var p = new Promise( (resolve, reject) => {
+        AsyncStorage.getItem('@UserGUID_Str')
+            .then( (data) => {
+                if (data) {
+                    resolve(true)
+                }
+
+                return AsyncStorage.setItem('@UserGUID_Str', uuidv4());
+            })
+            .then( () => {
+                resolve(true);
+            })
+            .catch( (err) => {
+                reject(err);
+            });
+    });
+    return p;
+}

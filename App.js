@@ -8,9 +8,12 @@ import MainApp from './app/mainapp';
 
 import { SetupLocalDB } from './app/survalytics/services/localdb';
 import { SetupNetInfo } from './app/survalytics/services/network';
+import { SetUserGUID } from './app/survalytics/services/response';
+
 
 SetupLocalDB();
 SetupNetInfo();
+SetUserGUID();
 
 export default class App extends React.Component {
   render() {

@@ -66,7 +66,7 @@ export const Download = (immediate = false) => {
             let local_questions = return_data[1];
             return _processDownloadedData(server_questions_json, local_questions);
         }).then( async (processed_data) => {
-            await AsyncStorage.setItem('@TableSize:key', current_size.toString());
+            await AsyncStorage.setItem('@TableSize', current_size.toString());
             resolve(true);
         }).catch( (err) => {
             reject("ERROR: Download: " + err);
